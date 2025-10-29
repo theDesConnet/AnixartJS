@@ -33,10 +33,16 @@ export class Profile {
     public constructor(private readonly client: Anixart) { }
 
     /**
-     * Информация о профиле
+     * Получение информация о профиле по его ID
+     * 
+     * Возвращает {@link IProfileResponse}.
+     * 
      * @param id - ID Профиля
-     * @param options 
-     * @returns 
+     * @param options - Дополнительные параметры
+     * @returns Информацию о профиле с указанным ID
+     * 
+     * @example
+     * const profile = await client.profile.info(1);
      */
     public async info(id: number, options?: IBaseApiParams): Promise<IProfileResponse> {
         return this.client.call<DefaultResult, IProfileResponse>({ path: `/profile/${id}`, ...options });
