@@ -1,3 +1,12 @@
+/**
+ * ╔═══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                      ║
+ * ║    https://github.com/theDesConnet/AnixartJS      ║
+ * ║          Licensed under GPL-2.0 License           ║
+ * ║                   by DesConnet                    ║
+ * ╚═══════════════════════════════════════════════════╝
+ */
+
 import { Auth, Settings, Profile, Release, Notification, Collection, Discover, Channel, Feed } from "./api";
 import { IBaseApiParams, IScheduleResponse, ITypeResponse, DefaultResult } from "./types";
 import { Anixart } from "./client";

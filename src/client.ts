@@ -1,3 +1,12 @@
+/**
+ * ╔═══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                      ║
+ * ║    https://github.com/theDesConnet/AnixartJS      ║
+ * ║          Licensed under GPL-2.0 License           ║
+ * ║                   by DesConnet                    ║
+ * ╚═══════════════════════════════════════════════════╝
+ */
+
 import { DefaultResult, IBaseRequest, IResponse, LoginResult } from "./types";
 import { Endpoints } from "./endpoints";
 import { Channel } from "./classes/Channel";
@@ -100,7 +109,7 @@ export class Anixart{
             password
         });
 
-        if (request.code == 0) this.token = request.profileToken.token;
+        if (request.code == DefaultResult.Ok) this.token = request.profileToken.token;
 
         return request.code;
     }
