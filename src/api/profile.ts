@@ -19,17 +19,25 @@ import {
     AchivementResult,
     ISocialResponse,
     IExportBookmarksResponse,
-    BookmarkExportResult
+    BookmarkExportResult,
+    BlocklistAddResult
 } from "../types";
 
 /**
  * Класс профиля
  * 
- * TODO: changeAvatar
+ * TODO: Понять для чего нужен эндпоинт '/profile/process/{id}' - POST
+ * Пока что предположение что это что-то для модерации
  */
 export class Profile {
     public constructor(private readonly client: Anixart) { }
 
+    /**
+     * Информация о профиле
+     * @param id - ID Профиля
+     * @param options 
+     * @returns 
+     */
     public async info(id: number, options?: IBaseApiParams): Promise<IProfileResponse> {
         return this.client.call<DefaultResult, IProfileResponse>({ path: `/profile/${id}`, ...options });
     }
@@ -60,8 +68,12 @@ export class Profile {
         return await this.client.call<DefaultResult, IPageableResponse<IProfileShort>>({ path: `/profile/friend/recomendations`, ...options });
     }
 
-    public async getFriendRequests(type: "in" | "out", count: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfileShort>> {
+    public async getLastFriendRequests(type: "in" | "out", count: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfileShort>> {
         return await this.client.call<DefaultResult, IPageableResponse<IProfileShort>>({ path: `/profile/friend/requests/${type}/last`, queryParams: { count }, ...options });
+    }
+
+    public async getFriendRequests(type: "in" | "out", page: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfileShort>> {
+        return await this.client.call<DefaultResult, IPageableResponse<IProfileShort>>({ path: `/profile/friend/requests/${type}/${page}`, ...options });
     }
 
     public async sendFriendRequest(id: number, options?: IBaseApiParams): Promise<IFriendRequestResponse> {
@@ -110,5 +122,17 @@ export class Profile {
 
     public async exportBookmarks(listIds: Array<number>, sort?: number, options?: IBaseApiParams): Promise<IExportBookmarksResponse> {
         return await this.client.call<BookmarkExportResult, IExportBookmarksResponse>({ path: "/export/bookmarks", json: { bookmarksExportProfileLists: listIds }, queryParams: {sort}, ...options })
+    }
+
+    public async getBlocklist(page: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfile>> {
+        return await this.client.call<DefaultResult, IPageableResponse<IProfile>>({ path: `/profile/blocklist/all/${page}`, ...options });
+    }
+
+    public async addToBlocklist(id: number, options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<DefaultResult, IResponse>({ path: `/profile/blocklist/add/${id}`, ...options });
+    }
+
+    public async removeFromBlocklist(id: number, options?: IBaseApiParams): Promise<IResponse<BlocklistAddResult>> {
+        return await this.client.call<BlocklistAddResult, IResponse<BlocklistAddResult>>({ path: `/profile/blocklist/remove/${id}`, ...options });
     }
 }
