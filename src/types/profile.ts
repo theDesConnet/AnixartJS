@@ -207,3 +207,7 @@ export enum AchivementResult {
     AlreadyGranted = 2,
     AchivementNotFound = 3
 }
+
+export enum BlocklistAddResult {
+    AlreadyInBlocklist = 2
+}

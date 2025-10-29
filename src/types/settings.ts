@@ -69,10 +69,6 @@ export enum ChangeLoginResult {
     TimeLimit = 4
 }
 
-export enum BlocklistAddResult {
-    AlreadyInBlocklist = 2
-}
-
 export enum ChangeEmailResult {
     InvalidEmail = 2,
     InvalidCurrentEmail = 3,
