@@ -20,7 +20,8 @@ import {
     ISocialResponse,
     IExportBookmarksResponse,
     BookmarkExportResult,
-    BlocklistAddResult
+    BlocklistAddResult,
+    BookmarkType
 } from "../types";
 
 /**
@@ -37,31 +38,104 @@ export class Profile {
      * 
      * Возвращает {@link IProfileResponse}.
      * 
+     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
+     * 
      * @param id - ID Профиля
      * @param options - Дополнительные параметры
      * @returns Информацию о профиле с указанным ID
      * 
      * @example
-     * const profile = await client.profile.info(1);
+     * const result = await client.endpoints.profile.info(1);
      */
     public async info(id: number, options?: IBaseApiParams): Promise<IProfileResponse> {
         return this.client.call<DefaultResult, IProfileResponse>({ path: `/profile/${id}`, ...options });
     }
 
+    /**
+     * Получение закладок из профиля по его ID
+     * 
+     * Возвращает {@link IRelease} внутри {@link IPageableResponse}.
+     * 
+     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
+     * 
+     * @param data - Данные для запроса
+     * @param options - Дополнительные параметры
+     * @returns Информацию о релизах которые находятся в закладке
+     * 
+     * @example
+     * const { BookmarkType, BookmarkSortType } = require("anixartjs");
+     * 
+     * const result = await client.endpoints.profile.getBookmarks({
+     *      type: BookmarkType.Watching,            //Тип закладки
+     *      id: 1,                                  //ID профиля
+     *      sort: BookmarkSortType.NewToOldAddTime, //Сортировка
+     *      page: 0                                 //Страница
+     * });
+     */
     public async getBookmarks(data: IBookmarkRequest, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
         return this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/profile/list/all/${data.id ? `${data.id}/` : ""}${data.type}/${data.page}`, queryParams: { sort: data.sort, filter: data.filter, filter_announce: data.filter_announce }, ...options });
     }
 
-    // Там вообще просто пустой класс ответа в приложении, так что будет просто дефолтные ответы
-    public async addBookmark(id: number, type: number, options?: IBaseApiParams): Promise<IResponse> {
+    /**
+     * Добавление релиза в закладку
+     * 
+     * Возвращает код результата {@link IResponse}.
+     * 
+     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
+     * 
+     * @param id - ID релиза
+     * @param type - Тип закладки {@link BookmarkType}
+     * @param options - Дополнительные параметры
+     * @returns Ответ API в виде числа
+     * 
+     * @example
+     * const { BookmarkType } = require("anixartjs");
+     * 
+     * const result = await client.endpoints.profile.addBookmarks(1, BookmarkType.Watching);
+     */
+    public async addBookmark(id: number, type: BookmarkType, options?: IBaseApiParams): Promise<IResponse> {
         return this.client.call<DefaultResult, IResponse>({ path: `/profile/list/add/${type}/${id}`, ...options });
     }
 
-    // Там вообще просто пустой класс ответа в приложении, так что будет просто дефолтные ответы
-    public async removeBookmark(id: number, type: number, options?: IBaseApiParams): Promise<IResponse> {
+    /**
+     * Удаление релиза из закладки
+     * 
+     * Возвращает код результата {@link IResponse}.
+     * 
+     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
+     * 
+     * @param id - ID релиза
+     * @param type - Тип закладки {@link BookmarkType}
+     * @param options - Дополнительные параметры
+     * @returns Ответ API в виде числа
+     * 
+     * @example
+     * const { BookmarkType } = require("anixartjs");
+     * 
+     * const result = await client.endpoints.profile.removeBookmarks(1, BookmarkType.Watching);
+     */
+    public async removeBookmark(id: number, type: BookmarkType, options?: IBaseApiParams): Promise<IResponse> {
         return this.client.call<DefaultResult, IResponse>({ path: `/profile/list/delete/${type}/${id}`, ...options });
     }
 
+    /**
+     * Поиск пользователей
+     * 
+     * Возвращает результата поиска {@link IProfile} внутри {@link IPageableResponse}.
+     * 
+     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
+     * 
+     * @param data - Данные для поиска
+     * @param options - Дополнительные параметры
+     * @returns Результаты поиска
+     * 
+     * @example
+     * const result = await client.endpoints.profile.search({
+     *      query: "Mradxx", //Запрос
+     *      searchBy: 1,     //Пока что неизвестный параметр
+     *      page: 0          //Страница
+     * });
+     */
     public async search(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IProfile>> {
         return this.client.call<DefaultResult, IPageableResponse<IProfile>>({ path: `/search/profiles/${data.page}`, json: { query: data.query, page: data.page }, ...options });
     }

@@ -3,7 +3,6 @@
 import { IResponse } from "./response";
 import { IBaseRequestPageable } from "./request";
 import { IRelease, IVoteRelease } from "./release";
-import { SocialEditResult } from "./settings";
 
 export enum BookmarkType {
     Watching = 1,
@@ -27,7 +26,7 @@ export interface IBookmarkRequest extends IBaseRequestPageable {
     id: number,
     type: BookmarkType,
     sort: BookmarkSortType,
-    filter: number
+    filter?: number
 }
 
 export interface IProfileToken {
