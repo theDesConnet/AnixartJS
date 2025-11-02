@@ -6,7 +6,6 @@ import {
     IChannelResponse, 
     IChannel,
     IArticle,
-    IChannelSearchRequest,
     IArticleCreateRequest,
     IArticleCreateResponse,
     IChannelCreateRequest,
@@ -84,10 +83,6 @@ export class Channel {
 
     public async editArticle(id: number, article: IArticleCreateRequest, options?: IBaseApiParams) {
         return await this.client.call<ArticleCreateEditResult, IArticleCreateResponse>({ path: `/article/edit/${id}`, method: "POST", json: article, ...options });
-    }
-
-    public async search(data: IChannelSearchRequest, page: number, options?: IBaseApiParams): Promise<IPageableResponse<IChannel>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IChannel>>({ path: `/search/channels/${page}`, json: data, ...options });
     }
 
     public async create(data: IChannelCreateRequest, options?: IBaseApiParams): Promise<IChannelResponse<ChannelCreateEditResult>> {

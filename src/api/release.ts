@@ -16,7 +16,6 @@ import {
     IEpisodeResponse,
     IBaseApiParams, 
     IBaseCommentAddRequest, 
-    IBaseSearchRequest, 
     IPageableResponse, 
     IResponse,
     IReleaseFilterRequest,
@@ -84,10 +83,6 @@ export class Release {
 
     public async getVideoInCategory(data: IVideoReleaseInCategoryRequest, options?: IBaseApiParams): Promise<IPageableResponse<IVideo>> {
         return await this.client.call<DefaultResult, IPageableResponse<IVideo>>({ path: `/video/release/${data.id}/category/${data.categoryId}/${data.page}`, ...options });
-    }
-
-    public async search(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/search/releases/${data.page}`, json: { query: data.query, page: data.page }, apiV2: true, ...options });
     }
 
     public async getDubbers(id: number, options?: IBaseApiParams): Promise<IDubbersResponse> {
