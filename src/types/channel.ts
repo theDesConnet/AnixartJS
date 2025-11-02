@@ -1,5 +1,6 @@
 import { IProfile } from "./profile";
-import { IResponse, IBaseComment, CommentAddResult } from "./response";
+import { IBaseSearchRequest } from "./request";
+import { IResponse, IBaseComment, CommentAddResult, IPageableResponse } from "./response";
 
 export interface IChannel {
     id: number,
@@ -196,12 +197,27 @@ export interface IChannelSearchRequest {
     is_subscibed: boolean
 }
 
+export interface IArticleSearchRequest extends Omit<IBaseSearchRequest, "searchBy"> {
+    channel_id: number
+}
+
 export interface IArticleComment extends IBaseComment {
     article: IArticle
 }
 
 export interface IChannelMediaTokenResponse extends IResponse<EditorAvaliableResult> {
     media_upload_token: string
+}
+
+export interface IFeedSearchResponse extends IResponse {
+    articles: IPageableResponse<IArticle>,
+    channels: IPageableResponse<IChannel>,
+    tags: IPageableResponse<string>,
+    blogs: IPageableResponse<IChannel>
+}
+
+export interface IChannelSubscribersSearchRequest extends IBaseSearchRequest {
+    channel_id: number
 }
 
 export enum ArticleCreateEditResult {
