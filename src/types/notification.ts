@@ -20,6 +20,11 @@ export interface IFriendNotification extends IBaseNotification {
     by_profile: IProfile
 }
 
+export interface IArticleNotification extends IBaseNotification {
+    '@id': number,
+    article: number
+}
+
 export interface IRelatedReleaseNotification extends IBaseNotification {
     '@id': number,
     release: IRelease | number
