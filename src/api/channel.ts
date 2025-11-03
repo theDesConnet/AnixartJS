@@ -37,7 +37,11 @@ import {
     ChannelUploadCoverAvatarResult,
     ChannelBlockResult,
     ArticleSuggestionPublishResult,
-    ArticleSuggestionDeleteResult
+    ArticleSuggestionDeleteResult,
+    IProfileChannel,
+    BlogCreateResult,
+    ChannelPermissionManageResult,
+    IChannelPermissionManageRequest
 } from "../types";
 import { Utils } from "../utils/Utils";
 
@@ -89,6 +93,10 @@ export class Channel {
         return await this.client.call<ChannelCreateEditResult, IChannelResponse<ChannelCreateEditResult>>({ path: `/channel/create`, method: "POST", json: data, ...options });
     }
 
+    public async createBlog(options?: IBaseApiParams): Promise<IChannelResponse<BlogCreateResult>> {
+        return await this.client.call<BlogCreateResult, IChannelResponse<BlogCreateResult>>({ path: `/channel/blog/create`, method: "POST", ...options });
+    }
+
     public async removeArticleComment(id: number, options?: IBaseApiParams): Promise<IResponse<CommentDeleteResult>> {
         return await this.client.call<CommentDeleteResult, IResponse<CommentDeleteResult>>({ path: `/article/comment/delete/${id}`, ...options });
     }
@@ -105,7 +113,7 @@ export class Channel {
         return await this.client.call<DefaultResult, IPageableResponse<IProfileShort>>({ path: `/article/votes/${id}/${page}`, queryParams: { sort }, method: "POST", ...options });
     }
 
-    public async getComments(id: number, page: number, sort: number, options?: IBaseApiParams): Promise<IPageableResponse<IArticleComment>> {
+    public async getComments(id: number, page: number | "popular", sort: number, options?: IBaseApiParams): Promise<IPageableResponse<IArticleComment>> {
         return await this.client.call<DefaultResult, IPageableResponse<IArticleComment>>({ path: `/article/comment/all/${id}/${page}`, queryParams: { sort }, ...options });
     }
 
@@ -169,7 +177,23 @@ export class Channel {
         return await this.client.call<ChannelBlockResult, IResponse<ChannelBlockResult>>({ path: `/channel/${id}/block/manage`, json: data, ...options })
     }
 
-    public async getChannelBlock(id: number, profileId: number, options?: IBaseApiParams): Promise<IChannelBlockInfoResponse> {
+    public async getChannelBlockProfile(id: number, profileId: number, options?: IBaseApiParams): Promise<IChannelBlockInfoResponse> {
         return await this.client.call<ChannelBlockResult, IChannelBlockInfoResponse>({ path: `/channel/${id}/block/${profileId}`, ...options})
+    }
+
+    public async getChannelBlocks(id: number, page: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfileChannel>> {
+        return await this.client.call<DefaultResult, IPageableResponse<IProfileChannel>>({ path: `/channel/${id}/block/all/${page}`, ...options});
+    }
+
+    public async getChannelRecommendations(page: number, options?: IBaseApiParams): Promise<IPageableResponse<IChannel>> {
+        return await this.client.call<DefaultResult, IPageableResponse<IChannel>>({ path: `/channel/recommendation/${page}`, ...options});
+    }
+
+    public async managePermissionChannel(id: number, data: IChannelPermissionManageRequest, options?: IBaseApiParams): Promise<IResponse<ChannelPermissionManageResult>> {
+        return await this.client.call<ChannelPermissionManageResult, IResponse<ChannelPermissionManageResult>>({ path: `/channel/${id}/permission/manage`, json: data, ...options });
+    }
+
+    public async getChannelPermissions(id: number, page: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfileChannel>> {
+        return await this.client.call<DefaultResult, IPageableResponse<IProfileChannel>>({ path: `/channel/${id}/permission/all/${page}`, ...options});
     }
 }

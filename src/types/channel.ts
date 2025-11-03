@@ -220,6 +220,11 @@ export interface IChannelSubscribersSearchRequest extends IBaseSearchRequest {
     channel_id: number
 }
 
+export interface IChannelPermissionManageRequest {
+    target_profile_id: number,
+    permission: number
+}
+
 export enum ArticleCreateEditResult {
     InvalidRepostArticle = 2,
     InvalidPayload = 3,
