@@ -192,9 +192,9 @@ export interface IChannelBlockInfoResponse extends IResponse<ChannelBlockResult>
 
 export interface IChannelSearchRequest {
     query: string,
-    permission: number,
+    permission?: number,
     is_blog: boolean,
-    is_subscibed: boolean
+    is_subscribed: boolean
 }
 
 export interface IArticleSearchRequest extends Omit<IBaseSearchRequest, "searchBy"> {
