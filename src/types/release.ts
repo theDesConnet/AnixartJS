@@ -1,6 +1,6 @@
 import { IPageableResponse, IResponse, IBaseComment, CommentAddResult } from './response'
-import { IProfileShort, IProfile } from './profile'
-import { IBaseRequestPageable } from './request'
+import { IProfileShort, IProfile, BookmarkType } from './profile'
+import { IBaseRequestPageable, IBaseSearchRequest } from './request'
 
 export enum ReleaseCategory {
     Unknown = 0,
@@ -346,4 +346,8 @@ export interface IExportRelease {
     your_vote: number | null,
     profile_list_status: number,
     is_favorite: boolean
+}
+
+export interface IReleasesInBookmarksSearchRequest extends IBaseSearchRequest {
+    type: BookmarkType
 }

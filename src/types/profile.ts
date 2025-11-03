@@ -3,7 +3,6 @@
 import { IResponse } from "./response";
 import { IBaseRequestPageable } from "./request";
 import { IRelease, IVoteRelease } from "./release";
-import { SocialEditResult } from "./settings";
 
 export enum BookmarkType {
     Watching = 1,
@@ -27,7 +26,7 @@ export interface IBookmarkRequest extends IBaseRequestPageable {
     id: number,
     type: BookmarkType,
     sort: BookmarkSortType,
-    filter: number
+    filter?: number
 }
 
 export interface IProfileToken {
@@ -150,6 +149,24 @@ export interface IProfileShort {
     friend_count: number
 }
 
+export interface IProfileChannel {
+    id: number,
+    login: string,
+    avatar: string,
+    permission_creation_date: number,
+    permission: number,
+    badge_name: string | null,
+    badge_type: number | null,
+    badge_url: string | null,
+    is_blocked: boolean,
+    is_sponsor: boolean,
+    is_verified: boolean,
+    is_perm_blocked: boolean,
+    channel_id: number,
+    block_reason: string | null,
+    block_expire_date: number | null
+}
+
 export interface IProfileResponse extends IResponse {
     profile: IProfile,
     is_my_profile: boolean
@@ -206,4 +223,8 @@ export enum RemoveFriendRequestResult {
 export enum AchivementResult {
     AlreadyGranted = 2,
     AchivementNotFound = 3
+}
+
+export enum BlocklistAddResult {
+    AlreadyInBlocklist = 2
 }

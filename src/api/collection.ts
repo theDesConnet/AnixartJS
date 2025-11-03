@@ -15,7 +15,8 @@ import {
     FavoriteCollectionDeleteResult,
     CollectionCreateEditResult,
     ReleaseAddCollectionResult,
-    CollectionDeleteResult
+    CollectionDeleteResult,
+    IReleaseResponse
 } from "../types";
 
 /**
@@ -84,5 +85,9 @@ export class Collection {
 
     public async getCommentReplies(id: number, page: number, sort: number, options?: IBaseApiParams): Promise<IPageableResponse<ICollectionComment>> {
         return await this.client.call<DefaultResult, IPageableResponse<ICollectionComment>>({ path: `/collection/comment/replies/${id}/${page}`, queryParams: { sort }, method: "POST", ...options });
+    }
+
+    public async getRandomRelease(id: number, extended: boolean = true, options?: IBaseApiParams): Promise<IReleaseResponse> {
+        return await this.client.call<DefaultResult, IReleaseResponse>({ path: `/release/collection/${id}/random`, queryParams: { extended_mode: extended }, ...options });
     }
 }

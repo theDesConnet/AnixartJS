@@ -8,14 +8,12 @@ import {
     IProfileSettingsResponse,
     PrivacyFriendRequestState,
     PrivacyState,
-    IProfileShort, 
     ISocialResponse, 
     IBaseApiParams, 
     IPageableResponse, 
     IResponse,
     IPasswordChangeResponse,
     DefaultResult,
-    BlocklistAddResult,
     SocialEditResult,
     ChangeEmailConfirmResult,
     ChangeEmailResult,
@@ -31,15 +29,19 @@ export class Settings {
     }
 
     public async getBadges(page: number, options?: IBaseApiParams): Promise<IBadgesResponse> {
-        return await this.client.call<DefaultResult, IBadgesResponse>({ path: `/profile/preference/badges/${page}`, ...options });
+        return await this.client.call<DefaultResult, IBadgesResponse>({ path: `/profile/preference/badge/all/${page}`, ...options });
+    }
+
+    public async editBadge(id: number, options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<DefaultResult, IResponse>({ path: `/profile/preference/badge/edit/${id}`, ...options });
+    }
+
+    public async removeBadge(options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<DefaultResult, IResponse>({ path: `/profile/preference/badge/remove`, ...options });
     }
 
     public async setStatus(status: string, options?: IBaseApiParams): Promise<IResponse> {
         return await this.client.call<DefaultResult, IResponse>({ path: `/profile/preference/status/edit`, json: { status }, ...options });
-    }
-
-    public async getBlocklist(page: number, options?: IBaseApiParams): Promise<IPageableResponse<IProfileShort>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IProfileShort>>({ path: `/profile/preference/blocklist/${page}`, ...options });
     }
 
     public async getSocial(options?: IBaseApiParams): Promise<ISocialResponse> {
@@ -54,20 +56,12 @@ export class Settings {
         return await this.client.call<ChangeEmailConfirmResult, IEmailChangeConfirmResponse>({ path: `/profile/preference/email/change/confirm`, queryParams: { current: currentPassword }, ...options });
     }
 
-    public changeEmail(data: IEmailChangeRequest, options?: IBaseApiParams): Promise<IResponse<ChangeEmailResult>> {
-        return this.client.call<ChangeEmailResult, IResponse<ChangeEmailResult>>({ path: `/profile/preference/email/change`, queryParams: { current_password: data.password, current: data.oldEmail, new: data.newEmail }, ...options });
+    public async changeEmail(data: IEmailChangeRequest, options?: IBaseApiParams): Promise<IResponse<ChangeEmailResult>> {
+        return await this.client.call<ChangeEmailResult, IResponse<ChangeEmailResult>>({ path: `/profile/preference/email/change`, queryParams: { current_password: data.password, current: data.oldEmail, new: data.newEmail }, ...options });
     }
 
     public async changePassword(currentPassword: string, newPassword: string, options?: IBaseApiParams): Promise<IPasswordChangeResponse> {
         return await this.client.call<ChangePasswordResult, IPasswordChangeResponse>({ path: `/profile/preference/password/change`, queryParams: { current: currentPassword, new: newPassword }, ...options });
-    }
-
-    public async addBlocklist(id: number, options?: IBaseApiParams): Promise<IResponse<BlocklistAddResult>> {
-        return await this.client.call<BlocklistAddResult, IResponse<BlocklistAddResult>>({ path: `/profile/blocklist/add/${id}`, ...options });
-    }
-
-    public async removeBlocklist(id: number, options?: IBaseApiParams): Promise<IResponse> {
-        return await this.client.call<DefaultResult, IResponse>({ path: `/profile/blocklist/remove/${id}`, ...options });
     }
 
     public async getLoginInfo(options?: IBaseApiParams): Promise<ILoginInfoResponse> {

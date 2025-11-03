@@ -151,7 +151,7 @@ export class Channel {
     }
 
     public async getBlocklist(profile: BaseProfile | FullProfile | number): Promise<IChannelBlockInfo | null> {
-        const request = await this.client.endpoints.channel.getChannelBlock(this.id, typeof(profile) == "number" ? profile : profile.id);
+        const request = await this.client.endpoints.channel.getChannelBlockProfile(this.id, typeof(profile) == "number" ? profile : profile.id);
 
         return request.channel_block;
     }

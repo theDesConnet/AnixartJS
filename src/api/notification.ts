@@ -6,7 +6,8 @@ import {
     IRelatedReleaseNotification,
     IResponse,
     IBaseApiParams,
-    DefaultResult
+    DefaultResult,
+    IArticleNotification
 } from "../types";
 
 //TODO: Удаление конкретных уведомлений
@@ -41,7 +42,15 @@ export class Notification {
         return await this.client.call<DefaultResult, IPageableResponse<any>>({ path: `/notification/collectionComments/${page}`, ...options });
     }
 
+    public async getArticleNotifications(page: number, options?: IBaseApiParams): Promise<IPageableResponse<IArticleNotification>> {
+        return await this.client.call<DefaultResult, IPageableResponse<IArticleNotification>>({ path: `/notification/articles/${page}`, ...options });
+    }
+
     public async removeAllNotifications(options?: IBaseApiParams): Promise<IResponse> {
         return await this.client.call<DefaultResult, IResponse>({ path: `/notification/delete/all`, ...options });
+    }
+
+    public async readNotifications(options?: IBaseApiParams): Promise<IResponse> {
+        return await this.client.call<DefaultResult, IResponse>({ path: `/notification/read`, ...options });
     }
 }

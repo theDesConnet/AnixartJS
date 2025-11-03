@@ -7,3 +7,4 @@ export * from "./collection";
 export * from "./discover";
 export * from "./channel";
 export * from "./feed";
+export * from "./search";
