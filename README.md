@@ -96,9 +96,11 @@ const anixart = new Anixart({
 
 ```typescript
 try {
+  const { DefaultResult } = require("anixartjs")
+
   const responseCode = await anixart.login('ваше-имя-пользователя', 'ваш-пароль');
   
-  if (responseCode === 0) {
+  if (responseCode === DefaultResult.Ok) {
     console.log('🎉 Вход выполнен успешно!');
   } else {
     console.error('❌ Ошибка входа, код:', responseCode);
