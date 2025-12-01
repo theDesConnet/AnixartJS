@@ -115,6 +115,7 @@ export interface IArticlePayloadBlock {
 }
 
 export interface IArticleCreateRequest {
+    is_signed: boolean,
     repost_article_id: number | null,
     payload: {
         time: number,

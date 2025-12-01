@@ -34,6 +34,7 @@ export interface IArticleEmbedBlockBuilder {
 
 export class ArticleBuilder {
     private blocks: IArticlePayloadBlock[] = [];
+    private isSigned: boolean = false;
     private repostArticleId: number | null = null;
     private readonly maxBlockCount: number = 25;
     private generateUniqueId(): string {
@@ -47,6 +48,7 @@ export class ArticleBuilder {
 
     returnBuildAricle(): IArticleCreateRequest {
         return {
+            is_signed: this.isSigned,
             repost_article_id: this.repostArticleId,
             payload: {
                 time: Date.now(),
@@ -55,6 +57,12 @@ export class ArticleBuilder {
                 block_count: this.blocks.length
             }
         };
+    }
+
+    public setSignedState(isSigned: boolean): ArticleBuilder {
+        this.isSigned = isSigned;
+
+        return this;
     }
 
     public setRepostArticle(article: Article | number): ArticleBuilder {
