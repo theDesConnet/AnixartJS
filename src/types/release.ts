@@ -105,7 +105,7 @@ export interface IRelease {
     translators: string
     studio: string
     description: string
-    note: null
+    note: string | null
     related: IRelated
     category: IReleaseCategory
     rating: number
@@ -152,7 +152,7 @@ export interface IRelease {
     profile_list_status: number
     status_id: number
     last_view_timestamp: number
-    last_view_episode: null
+    last_view_episode: IEpisode
     is_viewed: boolean
     is_favorite: boolean
     is_view_blocked: boolean
@@ -184,6 +184,7 @@ export interface IVoteRelease {
     rating: number,
     grade: number,
     status: number,
+    poster: string,
     title_original: string,
     title_ru: string,
     favorites_count: number,

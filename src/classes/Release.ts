@@ -1,5 +1,5 @@
 import { Anixart } from "../client";
-import { BookmarkType, IBaseCommentAddRequest, ICommentRelease, IEpisodeLastUpdate, IRelated, IRelease, IReleaseCategory, IReleaseStatus, IVideoBanners, DefaultResult, Writable, ReleaseAddCollectionResult } from "../types";
+import { BookmarkType, IBaseCommentAddRequest, ICommentRelease, IEpisodeLastUpdate, IRelated, IRelease, IReleaseCategory, IReleaseStatus, IVideoBanners, DefaultResult, Writable, ReleaseAddCollectionResult, IEpisode } from "../types";
 import { Collection } from "./Collection";
 import { Dubber } from "./Dubber";
 import { ReleaseComment } from "./ReleaseComment";
@@ -16,7 +16,7 @@ export class Release {
     public readonly translators: string;
     public readonly studio: string;
     public readonly description: string;
-    public readonly note: null;
+    public readonly note: string | null;
     public readonly related: IRelated;
     public readonly category: IReleaseCategory;
     public readonly rating: number;
@@ -63,7 +63,7 @@ export class Release {
     public readonly profileListStatus: number;
     public readonly statusId: number;
     public readonly lastViewTimestamp: number;
-    public readonly lastViewEpisode: null;
+    public readonly lastViewEpisode: IEpisode;
     public readonly isViewed: boolean;
     public readonly isFavorite: boolean;
     public readonly isViewBlocked: boolean;
