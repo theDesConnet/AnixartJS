@@ -151,7 +151,7 @@ export interface IArticleCreateResponse extends IResponse<ArticleCreateEditResul
 export interface IArticle {
     id: number,
     channel: IChannel,
-    author: IProfile,
+    author: IProfile | null,
     payload: {
         time: number,
         blocks: IArticlePayloadBlock[]

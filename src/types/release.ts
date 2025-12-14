@@ -195,6 +195,7 @@ export interface IVoteRelease {
     is_play_disabled: boolean,
     is_adult: boolean,
     my_vote: number,
+    voted_at: number,
     episodes_released: number,
     episodes_total: number,
     release_date: string,
