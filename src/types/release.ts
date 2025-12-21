@@ -31,6 +31,13 @@ export enum BookmarkExportResult {
     InvalidExtraFields = 3
 }
 
+export enum FilterSortType {
+    SortDateUpadte = 0,
+    SortGrade = 1,
+    SortYear = 2,
+    SortPopular = 3
+}
+
 export interface ICommentRepliesRequest extends IBaseRequestPageable {
     id: number,
     sort: number
@@ -42,23 +49,24 @@ export interface IVideoReleaseInCategoryRequest extends IBaseRequestPageable {
 }
 
 export interface IReleaseFilterRequest {
-    categoryId?: number
+    category_id?: number
     country?: string
-    endYear?: number
-    episodeDurationFrom?: number
-    episodeDurationTo?: number
-    episodesFrom?: number
-    episodesTo?: number
-    isGenresExcludeModeEnabled?: boolean
+    end_year?: number
+    episode_duration_from?: number
+    episode_duration_to?: number
+    episodes_from?: number
+    episodes_to?: number
+    is_genres_exclude_mode_enabled?: boolean
     season?: number
-    startYear?: number
-    statusId?: number
+    start_year?: number
+    status_id?: number
     studio?: string
-    sort?: number
+    sort?: FilterSortType
     genres?: string[]
-    profileListExclusions?: number[]
+    profile_list_exclusions?: number[]
     types?: number[]
-    ageRatings?: number[]
+    age_ratings?: number[],
+    source?: string
 }
 
 export interface IReleaseFilterResponse extends IPageableResponse<IRelease> { }
