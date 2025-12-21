@@ -32,7 +32,7 @@ export enum BookmarkExportResult {
 }
 
 export enum FilterSortType {
-    SortDateUpadte = 0,
+    SortDateUpdate = 0,
     SortGrade = 1,
     SortYear = 2,
     SortPopular = 3
