@@ -2,7 +2,7 @@ const { ArticleBuilder } = require('../dist/utils/ArticleBuilder');
 const { Anixart } = require('../dist/index');
 const fs = require('fs');
 
-const a = new Anixart({ token: "here" });
+const a = new Anixart({ token: "API_TOKEN" }); // Вставьте свой токен
 
 
 
@@ -10,10 +10,10 @@ setTimeout(async () => {
     const channel = await a.getChannelById(2585);
     const token = await channel.getMediaToken(false, false);
 
-    //Загрузка изображения на сервера Anixart (из других источников не даст создать)
+    // Загрузка изображения на сервера Anixart (из других источников не даст создать)
     const image = await a.endpoints.channel.uploadArticleImage(token, fs.readFileSync("./test.jpg"));
 
-    //Встраивание ссылки в пост
+    // Встраивание ссылки в пост
     const embed = await a.endpoints.channel.generateEmbedData("link", token, "https://anixart.tv/release/1");
 
     const aBuilder = new ArticleBuilder().addBlocks([{
@@ -42,5 +42,5 @@ setTimeout(async () => {
         items: [image.file]
     }]);
 
-    console.log(await channel.createArticle(aBuilder)); //Создаём пост и выводим его;
+    console.log(await channel.createArticle(aBuilder)); // Создаём пост и выводим его;
 }, 1000);
