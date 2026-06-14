@@ -1,198 +1,317 @@
-> [!WARNING]  
-> Данный проект был сделан в ознакомительных целях. Автор осуждает и не поддерживает создание авторегов, ботов для накрутки лайков, спам ботов и любых других проектов нацеленых на абуз и злоупотребление API Anixart.
+> [!WARNING]
+> Проект создан исключительно в ознакомительных целях. Автор осуждает создание авторегов, ботов для накрутки лайков, спам-ботов и любых других инструментов, направленных на абуз или злоупотребление API Anixart.
 
-<h2 align="center">AnixartJS</h2>
+<br />
 
-AnixartJS — это имплементация **API Anixart** на **TypeScript** для NodeJS, предоставляющая удобный и интуитивно понятный интерфейс для взаимодействия с приложением Anixart.
+<div align="center">
+
+# AnixartJS
+
+TypeScript-библиотека для работы с API Anixart в Node.js
+
+[![npm](https://img.shields.io/npm/v/anixartjs?style=flat-square)](https://www.npmjs.com/package/anixartjs)
+[![license](https://img.shields.io/github/license/theDesConnet/AnixartJS?style=flat-square)](LICENSE)
+[![language](https://img.shields.io/github/languages/top/theDesConnet/AnixartJS?style=flat-square)](https://github.com/theDesConnet/AnixartJS)
+[![issues](https://img.shields.io/github/issues/theDesConnet/AnixartJS?style=flat-square)](https://github.com/theDesConnet/AnixartJS/issues)
+
+</div>
 
 
-## 📚 Содержание
+## О проекте
 
-1. [Установка](#-установка)
-2. [Использование](#-использование)
-   - [Пример](#пример-использования-anixartjs)
-   - [Инициализация](#инициализация)
-   - [Аутентификация](#аутентификация)
-   - [Получение данных](#получение-данных)
-4. [Вклад в проект](#-вклад-в-проект)
-5. [Лицензия](#-лицензия)
+**AnixartJS** — это имплементация API Anixart на **TypeScript** для **Node.js**.
 
-## 🛠 Установка
+Библиотека предоставляет удобный интерфейс для получения данных из Anixart: релизов, профилей, каналов, статей, ленты и других сущностей.
 
-Установите AnixartJS с помощью npm:
+Можно использовать как готовые методы класса `Anixart`, так и прямой доступ к эндпоинтам через `endpoints`.
+
+
+## Возможности
+
+* работа с API Anixart через удобный TypeScript-интерфейс;
+* поддержка авторизации через логин и пароль;
+* возможность использовать уже существующий токен;
+* получение релизов, профилей, каналов, статей и ленты;
+* прямой доступ к эндпоинтам API;
+* поддержка CommonJS и ESM / TypeScript.
+
+
+## Установка
 
 ```bash
 npm install anixartjs
 ```
 
-## 🚀 Использование
 
-### Пример использования AnixartJS
+## Быстрый старт
 
-В этом примере показано, как использовать библиотеку **AnixartJS** для взаимодействия с API Anixart. Вы можете использовать как готовые методы классов, так и прямой доступ к эндпоинтам.
-
-#### Пример кода: `example.js`
+### CommonJS
 
 ```javascript
 const { Anixart } = require("anixartjs");
 
-/**
- * Авторизация может быть выполнена двумя способами:
- * 
- * 1. Используя токен при создании экземпляра класса:
- *    new Anixart({ token: "your-token-here" })
- * 
- * 2. Используя метод login():
- *    const anixartClient = new Anixart();
- *    anixartClient.login("username", "password"); // Возвращает ResponseCode
- */
-const anixartClient = new Anixart();
+const anixart = new Anixart();
 
-// Использование готовых методов классов
-anixartClient.getArticleById(123).then(article => {
-    if (article) {
-        console.log("📚 Статья найдена:");
-    } else {
-        console.log("⚠️ Статья не найдена.");
-    }
-}).catch(error => {
-    console.error("🚨 Ошибка при получении статьи:", error);
-});
+async function main() {
+  const release = await anixart.getReleaseById(101, true);
 
-anixartClient.getProfileById(456).then(profile => {
-    console.log("👤 Профиль пользователя:");
-    console.log(`Имя пользователя: ${profile.login}`);
-    console.log(`ID: ${profile.id}`);
-}).catch(error => {
-    console.error("🚨 Ошибка при получении профиля:", error);
-});
-
-// Использование эндпоинтов напрямую
-anixartClient.endpoints.release.info(789, true).then(rawResponse => {
-    console.log("🎬 Информация о релизе (RAW):");
-    console.log(rawResponse);
-}).catch(error => {
-    console.error("🚨 Ошибка при получении информации о релизе:", error);
-});
-```
-
-### Инициализация
-
-Чтобы начать использовать AnixartJS, создайте экземпляр класса `Anixart`. Вы можете указать пользовательский базовый URL или токен API при инициализации.
-
-```typescript
-import { Anixart } from 'anixartjs'; //ESM or Typescript
-const { Anixart } = require("anixartjs"); //CommonJS
-
-const anixart = new Anixart({
-  baseUrl: 'base-url', // Опционально, по умолчанию https://api.anixart.tv
-  token: 'your-token' // Опционально, используется для авторизованных запросов
-});
-```
-
-### 🔑 Аутентификация
-
-Для входа в систему используйте метод `login`. После успешной аутентификации токен API будет автоматически сохранен в экземпляре для последующих запросов.
-
-```typescript
-try {
-  const { DefaultResult } = require("anixartjs")
-
-  const responseCode = await anixart.login('ваше-имя-пользователя', 'ваш-пароль');
-  
-  if (responseCode === DefaultResult.Ok) {
-    console.log('🎉 Вход выполнен успешно!');
-  } else {
-    console.error('❌ Ошибка входа, код:', responseCode);
+  if (!release) {
+    console.log("Релиз не найден.");
+    return;
   }
-} catch (error) {
-  console.error('🚨 Ошибка при входе:', error);
+
+  console.log(`Релиз: ${release.titleRu}`);
+}
+
+main().catch(console.error);
+```
+
+### ESM / TypeScript
+
+```typescript
+import { Anixart } from "anixartjs";
+
+const anixart = new Anixart();
+
+const release = await anixart.getReleaseById(101, true);
+
+if (release) {
+  console.log(`Релиз: ${release.titleRu}`);
 }
 ```
 
-### 📥 Получение данных
+## Инициализация
 
-AnixartJS предоставляет методы для получения различных типов данных из API Anixart. Вот несколько примеров:
+Клиент можно создать без параметров:
 
-#### Получить канал по ID
+```typescript
+import { Anixart } from "anixartjs";
+
+const anixart = new Anixart();
+```
+
+Также можно передать дополнительные параметры:
+
+```typescript
+const anixart = new Anixart({
+  baseUrl: "https://api.anixart.tv",
+  token: "your-token"
+});
+```
+
+| Параметр  | Тип      | Описание                                                    |
+| --------- | -------- | ----------------------------------------------------------- |
+| `baseUrl` | `string` | Базовый URL API. По умолчанию используется URL Anixart API. |
+| `token`   | `string` | Токен для выполнения авторизованных запросов.               |
+
+
+## Авторизация
+
+Для входа в аккаунт используйте метод `login`.
+
+После успешной авторизации токен сохраняется внутри экземпляра клиента и используется для последующих запросов.
+
+```typescript
+import { Anixart, DefaultResult } from "anixartjs";
+
+const anixart = new Anixart();
+
+const responseCode = await anixart.login("username", "password");
+
+if (responseCode === DefaultResult.Ok) {
+  console.log("Вход выполнен успешно.");
+} else {
+  console.log("Не удалось выполнить вход. Код:", responseCode);
+}
+```
+
+Также можно сразу создать клиент с уже полученным токеном:
+
+```typescript
+const anixart = new Anixart({
+  token: "your-token"
+});
+```
+
+## Примеры использования
+
+<details>
+<summary>Получить канал по ID</summary>
 
 ```typescript
 const channel = await anixart.getChannelById(123);
 
 if (channel) {
-  console.log(`📺 Название канала: ${channel.title}`);
+  console.log(`Название канала: ${channel.title}`);
 } else {
-  console.log('⚠️ Канал не найден.');
+  console.log("Канал не найден.");
 }
 ```
 
-#### Получить профиль пользователя по ID
+</details>
+
+<details>
+<summary>Получить профиль пользователя по ID</summary>
 
 ```typescript
 const profile = await anixart.getProfileById(456);
-console.log(`👤 Имя пользователя: ${profile.login}`);
+
+if (profile) {
+  console.log(`Имя пользователя: ${profile.login}`);
+  console.log(`ID: ${profile.id}`);
+} else {
+  console.log("Профиль не найден.");
+}
 ```
 
-#### Получить последние статьи ленты
+</details>
+
+<details>
+<summary>Получить последние статьи ленты</summary>
 
 ```typescript
-const articles = await anixart.getLatestFeed(1); // Номер страницы как аргумент
-articles.forEach(article => {
-  console.log(`📄 ID статьи: ${article.id}`);
+const articles = await anixart.getLatestFeed(1);
+
+articles.forEach((article) => {
+  console.log(`ID статьи: ${article.id}`);
 });
 ```
 
-#### Получить случайный релиз
+</details>
+
+<details>
+<summary>Получить случайный релиз</summary>
 
 ```typescript
-const release = await anixart.getRandomRelease(true); // Расширенные детали
-console.log(`🎲 Заголовок случайного релиза: ${release.titleRu}`);
+const release = await anixart.getRandomRelease(true);
+
+if (release) {
+  console.log(`Случайный релиз: ${release.titleRu}`);
+} else {
+  console.log("Релиз не найден.");
+}
 ```
 
-#### Получить статью по ID
+</details>
+
+<details>
+<summary>Получить статью по ID</summary>
 
 ```typescript
 const article = await anixart.getArticleById(789);
 
 if (article) {
-  console.log(`📄 ID статьи: ${article.id}`);
+  console.log(`ID статьи: ${article.id}`);
 } else {
-  console.log('⚠️ Статья не найдена.');
+  console.log("Статья не найдена.");
 }
 ```
 
-#### Получить релиз по ID
+</details>
+
+<details>
+<summary>Получить релиз по ID</summary>
 
 ```typescript
-const release = await anixart.getReleaseById(101, true); // Расширенные детали
+const release = await anixart.getReleaseById(101, true);
 
 if (release) {
-  console.log(`🎬 Заголовок релиза: ${release.titleRu}`);
+  console.log(`Заголовок релиза: ${release.titleRu}`);
 } else {
-  console.log('⚠️ Релиз не найден.');
+  console.log("Релиз не найден.");
 }
 ```
+
+</details>
+
+<details>
+<summary>Прямое использование эндпоинтов</summary>
+
+```typescript
+const rawResponse = await anixart.endpoints.release.info(789, true);
+
+console.log(rawResponse);
+```
+
+</details>
+
+
+## Полный пример
+
+```javascript
+const { Anixart } = require("anixartjs");
+
+const anixart = new Anixart();
+
+async function main() {
+  const article = await anixart.getArticleById(123);
+
+  if (article) {
+    console.log("Статья найдена:");
+    console.log(`ID: ${article.id}`);
+  } else {
+    console.log("Статья не найдена.");
+  }
+
+  const profile = await anixart.getProfileById(456);
+
+  if (profile) {
+    console.log("Профиль пользователя:");
+    console.log(`Имя пользователя: ${profile.login}`);
+    console.log(`ID: ${profile.id}`);
+  } else {
+    console.log("Профиль не найден.");
+  }
+
+  const releaseInfo = await anixart.endpoints.release.info(789, true);
+
+  console.log("Информация о релизе:");
+  console.log(releaseInfo);
+}
+
+main().catch(console.error);
+```
+
 ## TODO
-- [ ] Добавление всех эндпоинтов
-- [x] Добавление классов для коллекций
-- [ ] Документация
-- [ ] Возможность использовать библиотеку в браузере полностью
 
-## 🤝 Вклад в проект
+* [ ] Добавить все эндпоинты API
+* [x] Добавить классы для коллекций
+* [ ] Расширить документацию
+* [ ] Добавить полноценную поддержку использования библиотеки в браузере
+* [ ] Добавить больше примеров использования
 
-Я рад принимать вклады для улучшения AnixartJS!
 
-Убедитесь, что ваш код соответствует стандартам проекта.
+## Проекты, использующие AnixartJS
 
-## Проекты использующие AnixartJS
+| Проект                                             | Описание                                                                      |
+| -------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [AniDesk](https://github.com/theDesConnet/AniDesk) | Неофициальный десктоп-клиент Anixart.                                         |
+| [AnixApp](https://github.com/Maks1mio/anixapp)     | Неофициальное приложение Anixart для ПК с функционалом совместного просмотра. |
 
-- [AniDesk](https://github.com/theDesConnet/AniDesk) - Неофициальный десктоп клиент Anixart
-- [AnixApp](https://github.com/Maks1mio/anixapp) - Неофициальное приложение Anixart на ПК. Главной фичей является функционал совместного просмотра.
 
-## 📜 Лицензия
+## Вклад в проект
 
-Этот проект лицензирован под **GPL-2.0**. Подробности см. в файле [LICENSE](LICENSE).
+Вклад в развитие проекта приветствуется.
+
+Можно помочь проекту несколькими способами:
+
+* сообщить об ошибке через issue;
+* предложить улучшение;
+* добавить новый эндпоинт;
+* улучшить документацию;
+* отправить pull request.
+
+
+## Лицензия
+
+Проект распространяется под лицензией **GPL-2.0**.
+
+Подробности можно найти в файле [LICENSE](LICENSE).
 
 ---
 
-Если у вас есть вопросы или проблемы, пожалуйста, откройте issue в [GitHub репозитории](https://github.com/theDesConnet/AnixartJS). Я буду рад помочь! 😊
+<div align="center">
+
+Если у вас есть вопросы, идеи или вы нашли проблему, откройте issue в репозитории.
+
+</div>
