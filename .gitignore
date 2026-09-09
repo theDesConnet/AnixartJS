@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 node_modules/
 dist/
 package-lock.json
 tests/
-=======
-node_modules
->>>>>>> 747f35d (feat: coding new version 0.2.0)
