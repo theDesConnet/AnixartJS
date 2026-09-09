@@ -11,6 +11,7 @@
     "prebuild": "npm run api"
   },
   "devDependencies": {
+    "@types/node": "^26.1.2",
     "vitepress": "2.0.0-alpha.20",
     "vue": "^3.5.0",
     "typedoc": "0.28.20",
