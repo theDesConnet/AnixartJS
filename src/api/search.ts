@@ -1,282 +1,612 @@
-import { Anixart } from "../client";
-import { 
-    IBaseApiParams, 
-    IBaseSearchRequest, 
-    IPageableResponse, 
-    IProfile,
-    DefaultResult,
-    IRelease,
-    IChannel,
-    IChannelSearchRequest,
-    IArticleSearchRequest,
-    IArticle,
-    ICollection,
-    IReleasesInBookmarksSearchRequest,
-    IFeedSearchResponse,
-    IProfileChannel,
-    IChannelSubscribersSearchRequest
-} from "../types";
+import type { CommonResult } from "../models";
+import type { IRequestOptions } from "../core/http/httpTypes";
+import { Anixart } from "../core/anixartClient";
+import {
+  BookmarkType,
+  IArticle,
+  IArticlesSearchRequest,
+  IChannel,
+  IChannelProfile,
+  IChannelsSearchRequest,
+  ICollection,
+  IFeedSearchResponse,
+  IPageableResponse,
+  IProfile,
+  IRelease,
+  IReleaseSearchResponse,
+  ISearchRequest,
+} from "../models";
 
-/**
- * Класс поиска
- */
 export class Search {
-    constructor(private client: Anixart) { }
+  public constructor(private readonly _client: Anixart) {}
 
-    /**
-    * Поиск пользователей
-    * 
-    * Возвращает результата поиска {@link IProfile} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.profiles({
-    *      query: "Mradxx", //Запрос
-    *      page: 0          //Страница
-    * });
-    */
-    public async profiles(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IProfile>> {
-        return this.client.call<DefaultResult, IPageableResponse<IProfile>>({ path: `/search/profiles/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти статьи в канале.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link IArticlesSearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IArticle}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { IArticlesSearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: IArticlesSearchRequest = {
+   *   channel_id: 456,
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.articles(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async articles(
+    data: IArticlesSearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IArticle>> {
+    return (
+      await this._client.http.request<IPageableResponse<IArticle>>({
+        path: `/search/articles/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск релизов
-    * 
-    * Возвращает результата поиска {@link IRelease} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.releases({
-    *      query: "стоун",  //Запрос
-    *      page: 0          //Страница
-    * });
-    */
-    public async releases(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/search/releases/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, apiV2: true, ...options });
-    }
+  /**
+   * Найти каналы с учётом фильтров.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link IChannelsSearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IChannel}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { IChannelsSearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: IChannelsSearchRequest = {
+   *   query: "аниме",
+   *   is_blog: false,
+   *   is_subscribed: false,
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.channels(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async channels(
+    data: IChannelsSearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IChannel>> {
+    return (
+      await this._client.http.request<IPageableResponse<IChannel>>({
+        path: `/search/channels/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск каналов
-    * 
-    * Возвращает результата поиска {@link IChannel} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param page - Номер страницы
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.channels({
-    *      query: "новостная",  //Запрос
-    *      permission: 0,       //Привилегии (Необязательно)
-    *      is_blog: false,      //Является ли канал блогом
-    *      is_subscribed: false //Находится ли канал в подписках
-    * }, 0);
-    */
-    public async channels(data: IChannelSearchRequest, page: number, options?: IBaseApiParams): Promise<IPageableResponse<IChannel>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IChannel>>({ path: `/search/channels/${page}`, json: data, ...options });
-    }
+  /**
+   * Найти подписчиков канала.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param channelId - ID канала.
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IChannelProfile}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const channelId = 123;
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.channelSubscribers(
+   *   channelId,
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async channelSubscribers(
+    channelId: number,
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IChannelProfile>> {
+    return (
+      await this._client.http.request<IPageableResponse<IChannelProfile>>({
+        path: `/search/channel/${channelId}/subscribers/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск постов
-    * 
-    * Возвращает результата поиска {@link IArticle} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.articles({
-    *      query: "интересный пост",  //Запрос
-    *      channel_id: 1              //ID канала
-    *      page: 0                    //Страница
-    * });
-    */
-    public async articles(data: IArticleSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IArticle>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IArticle>>({ path: `/search/articles/${data.page}`, json: { query: data.query, channel_id: data.channel_id }, ...options });
-    }
+  /**
+   * Найти коллекции.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link ICollection}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.collections(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async collections(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<ICollection>> {
+    return (
+      await this._client.http.request<IPageableResponse<ICollection>>({
+        path: `/search/collections/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск коллекций
-    * 
-    * Возвращает результата поиска {@link ICollection} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.collections({
-    *      query: "коллекция",  //Запрос
-    *      page: 0              //Страница
-    * });
-    */
-    public async collections(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<ICollection>> {
-        return await this.client.call<DefaultResult, IPageableResponse<ICollection>>({ path: `/search/collections/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти коллекции среди избранных.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link ICollection}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.favoriteCollections(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async favoriteCollections(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<ICollection>> {
+    return (
+      await this._client.http.request<IPageableResponse<ICollection>>({
+        path: `/search/favoriteCollections/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск коллекций из избранных в профиле
-    * 
-    * Возвращает результата поиска {@link ICollection} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.favoriteCollections({
-    *      query: "коллекция",  //Запрос
-    *      page: 0              //Страница
-    * });
-    */
-    public async favoriteCollections(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<ICollection>> {
-        return await this.client.call<DefaultResult, IPageableResponse<ICollection>>({ path: `/search/favoriteCollections/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти релизы среди избранных.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.favorites(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async favorites(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IPageableResponse<IRelease>>({
+        path: `/search/favorites/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск релизов из избранных в профиле
-    * 
-    * Возвращает результата поиска {@link IRelease} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.favorties({
-    *      query: "стоун",  //Запрос
-    *      page: 0          //Страница
-    * });
-    */
-    public async favorties(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/search/favorites/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Выполнить поиск по ленте.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Найденные теги, каналы, блоги и статьи — {@link IFeedSearchResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.feed(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.tags);
+   */
+  public async feed(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IFeedSearchResponse> {
+    return (
+      await this._client.http.request<IFeedSearchResponse>({
+        path: `/search/feed/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск релизов из истории просмотра в профиле
-    * 
-    * Возвращает результата поиска {@link IRelease} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.history({
-    *      query: "стоун",  //Запрос
-    *      page: 0          //Страница
-    * });
-    */
-    public async history(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/search/history/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти релизы в истории просмотра.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.history(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async history(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IPageableResponse<IRelease>>({
+        path: `/search/history/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск коллекций в профиле
-    * 
-    * Возвращает результата поиска {@link ICollection} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.profileCollections({
-    *      query: "коллекция",  //Запрос
-    *      page: 0              //Страница
-    * });
-    */
-    public async profileCollections(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<ICollection>> {
-        return await this.client.call<DefaultResult, IPageableResponse<ICollection>>({ path: `/search/profileCollections/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти коллекции указанного профиля.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param profileId - ID профиля.
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param releaseId - ID релиза. Необязательный параметр.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link ICollection}.
+   *
+   * @remarks
+   * Необязательные аргументы пропущены через `undefined`, чтобы передать `options` последним.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const profileId = 123;
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.profileCollections(
+   *   profileId,
+   *   search,
+   *   page,
+   *   undefined,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async profileCollections(
+    profileId: number,
+    data: ISearchRequest,
+    page: number = 0,
+    releaseId?: number,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<ICollection>> {
+    return (
+      await this._client.http.request<IPageableResponse<ICollection>>({
+        path: `/search/profileCollections/${profileId}/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        query: {
+          release_id: releaseId,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск релизов из закладок в профиле
-    * 
-    * Возвращает результата поиска {@link IRelease} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.releasesInBookmarks({
-    *      query: "стоун",  //Запрос
-    *      page: 0          //Страница
-    * });
-    */
-    public async releasesInBookmarks(data: IReleasesInBookmarksSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/search/profile/list/${data.type}/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
-    
-    /**
-    * Поиск по ленте новостей
-    * 
-    * Возвращает результата поиска {@link IFeedSearchResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.feed({
-    *      query: "интересное что-то",  //Запрос
-    *      page: 0                      //Страница
-    * });
-    */
-    public async feed(data: IBaseSearchRequest, options?: IBaseApiParams): Promise<IFeedSearchResponse> {
-        return await this.client.call<DefaultResult, IFeedSearchResponse>({ path: `/search/feed/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти релизы в выбранном списке закладок.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param status - Список закладок — {@link BookmarkType}.
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart, BookmarkType } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const status = BookmarkType.Watching;
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.profileList(
+   *   status,
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async profileList(
+    status: BookmarkType,
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IPageableResponse<IRelease>>({
+        path: `/search/profile/list/${status}/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-    * Поиск подписчиков в канале
-    * 
-    * Возвращает результата поиска {@link IProfileChannel} внутри {@link IPageableResponse}.
-    * 
-    * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-    * 
-    * @param data - Данные для поиска
-    * @param options - Дополнительные параметры
-    * @returns Результаты поиска
-    * 
-    * @example
-    * const result = await client.endpoints.search.channelSubscribers({
-    *      query: "Mradxx",  //Запрос
-    *      channel_id: 1,    //ID канала
-    *      page: 0           //Страница
-    * });
-    */
-    public async channelSubscribers(data: IChannelSubscribersSearchRequest, options?: IBaseApiParams): Promise<IPageableResponse<IProfileChannel>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IProfileChannel>>({ path: `/search/channel/${data.channel_id}/subscribers/${data.page}`, json: { query: data.query, searchBy: data.searchBy }, ...options });
-    }
+  /**
+   * Найти профили.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IProfile}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.profiles(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async profiles(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IProfile>> {
+    return (
+      await this._client.http.request<IPageableResponse<IProfile>>({
+        path: `/search/profiles/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
+   * Найти релизы.
+   *
+   * Токен клиента передаётся в query, если задан.
+   * По умолчанию используется API v2: releases и related. API v1 возвращает content и счётчики страниц.
+   *
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Результаты API v2 — {@link IReleaseSearchResponse}; для API v1 — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.releases(
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log("releases" in result ? result.releases : result.content);
+   */
+  public async releases(
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IReleaseSearchResponse | IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IReleaseSearchResponse | IPageableResponse<IRelease>>({
+        path: `/search/releases/${page}`,
+        method: "POST",
+        apiVersion: 2,
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
 }

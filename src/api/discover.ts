@@ -1,101 +1,175 @@
-import { Anixart } from "../client";
+import type { CommonResult } from "../models";
+import type { IRequestOptions } from "../core/http/httpTypes";
+import { Anixart } from "../core/anixartClient";
 import {
-    IPageableResponse,
-    IBaseApiParams,
-    IRelease,
-    ICommentRelease,
-    IInterestingRelease,
-    DefaultResult
-} from "../types";
-
+  IInteresting,
+  IPageableResponse,
+  IRelease,
+  IReleaseComment,
+} from "../models";
 
 export class Discover {
-    public constructor(private readonly client: Anixart) { }
+  public constructor(private readonly _client: Anixart) {}
 
-    /**
-     * Получение списка релизов которые сейчас смотрят
-     * 
-     * Возвращает список {@link IRelease} внутри {@link IPageableResponse}.
-     * 
-     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-     * 
-     * @param page - Номер страницы
-     * @param options - Дополнительные параметры
-     * @returns Список релизов
-     * 
-     * @example
-     * const result = await client.endpoints.discover.getWatching(0);
-     */
-    public async getWatching(page: number, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/discover/watching/${page}`, ...options });
-    }
+  /**
+   * Получить популярные комментарии к релизам.
+   *
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IReleaseComment}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.discover.commentsWeek(
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async commentsWeek(
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IReleaseComment>> {
+    return (
+      await this._client.http.request<IPageableResponse<IReleaseComment>>({
+        path: "/discover/comments",
+        method: "POST",
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-     * Получение популяных комментариев (10 штук)
-     * 
-     * Возвращает список {@link ICommentRelease} внутри {@link IPageableResponse}.
-     * 
-     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-     * 
-     * @param options - Дополнительные параметры
-     * @returns Список релизов
-     * 
-     * @example
-     * const result = await client.endpoints.discover.getComments();
-     */
-    public async getComments(options?: IBaseApiParams): Promise<IPageableResponse<ICommentRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<ICommentRelease>>({ path: `/discover/comments`, ...options });
-    }
+  /**
+   * Получить наиболее обсуждаемые релизы.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const result = await client.endpoints.discover.discussing(
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async discussing(
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IPageableResponse<IRelease>>({
+        path: "/discover/discussing",
+        method: "POST",
+        auth: { type: "Anixart" },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-     * Получение самых обсуждаемых релизов (5 штук)
-     * 
-     * Возвращает список {@link IRelease} внутри {@link IPageableResponse}.
-     * 
-     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-     * 
-     * @param options - Дополнительные параметры
-     * @returns Список релизов
-     * 
-     * @example
-     * const result = await client.endpoints.discover.getDiscussing();
-     */
-    public async getDiscussing(options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/discover/discussing`, ...options });
-    }
+  /**
+   * Получить элементы раздела «Интересное».
+   *
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IInteresting}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.discover.interesting(
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async interesting(
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IInteresting>> {
+    return (
+      await this._client.http.request<IPageableResponse<IInteresting>>({
+        path: "/discover/interesting",
+        method: "POST",
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-     * Получение списка рекомендаций
-     * 
-     * Возвращает список {@link IRelease} внутри {@link IPageableResponse}.
-     * 
-     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-     * 
-     * @param page - Номер страницы
-     * @param options - Дополнительные параметры
-     * @returns Список релизов
-     * 
-     * @example
-     * const result = await client.endpoints.discover.getRecommendations(0);
-     */
-    public async getRecommendations(page: number, options?: IBaseApiParams): Promise<IPageableResponse<IRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IRelease>>({ path: `/discover/recommendations/${page}`, queryParams: { previous_page: page > 0 ? -1 : page - 1 }, ...options });
-    }
+  /**
+   * Получить страницу персональных рекомендаций релизов.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const page = 0;
+   *
+   * const result = await client.endpoints.discover.recommendations(
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async recommendations(
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IPageableResponse<IRelease>>({
+        path: `/discover/recommendations/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        query: {
+          previous_page: page == 0 ? 0 : page - 1,
+        },
+        ...options,
+      })
+    ).data;
+  }
 
-    /**
-     * Получение списка интересных релизов
-     * 
-     * Возвращает список {@link IInterestingRelease} внутри {@link IPageableResponse}.
-     * 
-     * Возможные ответы API в виде enum смотреть здесь {@link DefaultResult}
-     * 
-     * @param options - Дополнительные параметры
-     * @returns Список релизов
-     * 
-     * @example
-     * const result = await client.endpoints.discover.getInteresting(0);
-     */
-    public async getInteresting(options?: IBaseApiParams): Promise<IPageableResponse<IInterestingRelease>> {
-        return await this.client.call<DefaultResult, IPageableResponse<IInterestingRelease>>({ path: `/discover/interesting`, ...options });
-    }
+  /**
+   * Получить страницу релизов, которые сейчас смотрят.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const page = 0;
+   *
+   * const result = await client.endpoints.discover.watching(
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async watching(
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IRelease>> {
+    return (
+      await this._client.http.request<IPageableResponse<IRelease>>({
+        path: `/discover/watching/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        ...options,
+      })
+    ).data;
+  }
 }

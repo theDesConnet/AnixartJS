@@ -1,13 +1,13 @@
 {
   "name": "anixartjs",
-  "version": "0.1.8",
+  "version": "1.0.0",
   "description": "Anixart API Wrapper for NodeJS",
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
-    "build-win": "rd .\\dist /s /q && tsc"
+    "build": "tsc",
+    "test:typecheck": "tsc --noEmit"
   },
   "keywords": [
     "api",
@@ -23,8 +23,8 @@
   "author": "Roman U. (DesConnet)",
   "license": "GPL-2.0",
   "devDependencies": {
-    "@types/node": "^22.10.2",
-    "typescript": "^5.7.2"
+    "@types/node": "^26.1.2",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "form-data": "^4.0.2"

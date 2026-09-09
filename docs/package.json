@@ -1,0 +1,21 @@
+{
+  "name": "anixartjs-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "preview": "vitepress preview .",
+    "api": "typedoc --options typedoc.json",
+    "predev": "npm run api",
+    "prebuild": "npm run api"
+  },
+  "devDependencies": {
+    "vitepress": "2.0.0-alpha.20",
+    "vue": "^3.5.0",
+    "typedoc": "0.28.20",
+    "typedoc-plugin-markdown": "4.13.0",
+    "typedoc-vitepress-theme": "1.1.4",
+    "typescript": "~6.0.0"
+  }
+}
