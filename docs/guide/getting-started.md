@@ -1,3 +1,8 @@
+---
+title: Установка AnixartJS и первый запрос
+description: Установка AnixartJS из npm и первый запрос к Anixart API в Node.js и TypeScript.
+---
+
 # Установка и первый запрос
 
 AnixartJS предназначен для Node.js. Не размещайте токен аккаунта в клиентском коде сайта.
