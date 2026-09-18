@@ -43,6 +43,10 @@ const base = process.env.DOCS_BASE ?? "/";
  */
 const siteOrigin = process.env.DOCS_ORIGIN?.replace(/\/+$/, "");
 
+const sitemapHostname = siteOrigin
+  ? new URL(base, `${siteOrigin}/`).toString()
+  : undefined;
+
 /**
  * Включать только если выбранный хостинг действительно
  * поддерживает clean URLs.
@@ -90,6 +94,14 @@ export default defineConfig({
   description: siteDescription,
 
   base,
+
+  sitemap: sitemapHostname
+    ? {
+        hostname: sitemapHostname,
+      }
+    : undefined,
+
+  lastUpdated: true,
   cleanUrls,
 
   srcExclude: ["README.md"],
