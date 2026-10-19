@@ -56,6 +56,13 @@ export interface IChannel {
   block_expire_date: number | null;
   is_perm_blocked: boolean;
 
+  badge_id: number | null;
+  badge_name: string | null;
+  badge_type: number | null;
+  badge_url: string | null;
+
+  last_article_date: number;
+
   is_creator: boolean;
   is_administrator_or_higher: boolean;
 }

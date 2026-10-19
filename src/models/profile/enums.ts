@@ -76,3 +76,23 @@ export enum BookmarksExportResult {
 export enum BookmarksImportResult {
   ImportLimitReached = 2,
 }
+
+export enum AchievementResult {
+  AlreadyGranted = 2,
+  AchievementNotFound = 3,
+  ProfileNotFound = 4,
+  GrantLimitReached = 5,
+  BadgeChanged = 6
+}
+
+export enum ProfileBadgeShowcaseResult {
+  InvalidBadge = 2,
+  LimitReached = 3,
+}
+
+export enum BadgeAwardTrigger {
+  ClaimCode = "CLAIM_CODE",
+  EpisodeWatched = "EPISODE_WATCHED",
+  Manual = "MANUAL",
+  ProfileListStatus = "PROFILE_LIST_STATUS"
+}

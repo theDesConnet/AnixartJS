@@ -1,3 +1,4 @@
+import { IArticleCompact } from "../article/types";
 import {
   ICommonCommentCompact,
   ICommonProfileNotification,
@@ -45,7 +46,7 @@ export interface IProfileFriendNotification extends ICommonProfileNotification {
 
 export interface IProfileArticleNotification extends ICommonProfileNotification {
   "@id": number;
-  article: number;
+  article: IArticleCompact;
   profile: IProfile;
 }
 

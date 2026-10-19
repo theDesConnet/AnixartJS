@@ -41,11 +41,13 @@ import { Schedule } from "../api/release/schedule";
 import { Report } from "../api/report";
 import { Search } from "../api/search";
 import { Type } from "../api/type";
+import { Achievement } from "../api/achievement";
 
 export class Endpoints {
   public readonly article: Article;
   public readonly articleComment: ArticleComment;
   public readonly articleSuggestion: ArticleSuggestion;
+  public readonly achievement: Achievement;
   public readonly auth: Auth;
   public readonly channel: Channel;
   public readonly collection: Collection;
@@ -89,6 +91,7 @@ export class Endpoints {
     this.article = new Article(client);
     this.articleComment = new ArticleComment(client);
     this.articleSuggestion = new ArticleSuggestion(client);
+    this.achievement = new Achievement(client);
     this.auth = new Auth(client);
     this.channel = new Channel(client);
     this.collection = new Collection(client);

@@ -2,13 +2,15 @@ import type { IRequestOptions } from "../../core/http/httpTypes";
 import { Anixart } from "../../core/anixartClient";
 import {
   BookmarkType,
+  IBadge,
+  IPageableResponse,
   IReleaseResponse,
   IReleaseVote,
   IResponse,
 } from "../../models";
 
 export class Release {
-  public constructor(private readonly _client: Anixart) {}
+  public constructor(private readonly _client: Anixart) { }
 
   /**
    * Получить релиз по ID.
@@ -304,4 +306,39 @@ export class Release {
       })
     ).data;
   }
+
+
+  /**
+   * Получить значки, связанные с релизом.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param releaseId - ID релиза.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница значков — {@link IPageableResponse} с элементами {@link IBadge}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   * 
+   * const result = await client.endpoints.release.badges(123, 0);
+   * console.log(result.content);
+   */
+  public async badges(
+    releaseId: number,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IBadge>> {
+    return (
+      await this._client.http.request<IPageableResponse<IBadge>>({
+        path: `/release/${releaseId}/badges/${page}`,
+        method: "GET",
+        auth: { type: "Anixart" },
+        ...options,
+      })
+    ).data;
+  }
+
 }

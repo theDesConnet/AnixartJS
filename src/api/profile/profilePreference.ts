@@ -36,7 +36,7 @@ import {
 } from "../../models";
 
 export class ProfilePreference {
-  public constructor(private readonly _client: Anixart) {}
+  public constructor(private readonly _client: Anixart) { }
 
   /**
    * Удалить аватар профиля.
@@ -839,6 +839,39 @@ export class ProfilePreference {
       })
     ).data;
   }
+
+
+  /**
+   * Удалить историю изменения логина профиля.
+   *
+   * Требуется токен авторизации.
+   *
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Ответ API — {@link IResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   * 
+   * const result = await client.endpoints.profilePreference.deleteLoginHistory(
+   *   { timeoutMs: 15_000 }
+   * );
+   * console.log(result.code);
+   */
+  public async deleteLoginHistory(
+    options: IRequestOptions = {},
+  ): Promise<IResponse> {
+    return (
+      await this._client.http.request<IResponse>({
+        path: `/profile/preference/login/history/delete`,
+        method: "POST",
+        auth: { type: "Anixart", required: true },
+        ...options,
+      })
+    ).data;
+  }
+
 
   /**
    * Получить социальные ссылки текущего профиля.

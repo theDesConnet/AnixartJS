@@ -1,4 +1,4 @@
-import type { CommonResult } from "../models";
+import { ChannelDeleteResult, CommonResult } from "../models";
 import type { IRequestOptions } from "../core/http/httpTypes";
 import { Anixart } from "../core/anixartClient";
 import {
@@ -32,7 +32,7 @@ import {
 } from "../models";
 
 export class Channel {
-  public constructor(private readonly _client: Anixart) {}
+  public constructor(private readonly _client: Anixart) { }
 
   /**
    * Получить страницу статей канала.
@@ -1166,4 +1166,50 @@ export class Channel {
       })
     ).data;
   }
+
+
+  /**
+   * Удалить канал.
+   *
+   * Удалить канал может только его создатель.
+   * После удаления канал и все его записи становятся
+   * недоступными для пользователей.
+   *
+   * Требуется токен авторизации.
+   *
+   * Коды результата: {@link CommonResult}, {@link ChannelDeleteResult}.
+   *
+   * @param channelId - ID удаляемого канала.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Результат удаления — {@link IResponse}.
+   *
+   * @remarks
+   * Операция необратима.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   * 
+   * const result = await client.endpoints.channel.delete(
+   *   123,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.code);
+   */
+  public async delete(
+    channelId: number,
+    options: IRequestOptions = {},
+  ): Promise<IResponse<ChannelDeleteResult>> {
+    return (
+      await this._client.http.request<IResponse<ChannelDeleteResult>>({
+        path: `/channel/delete/${channelId}`,
+        method: "POST",
+        auth: { type: "Anixart", required: true },
+        resultEnum: ChannelDeleteResult,
+        ...options,
+      })
+    ).data;
+  }
+
 }

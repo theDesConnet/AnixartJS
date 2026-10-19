@@ -1,5 +1,5 @@
 import { ICommonComment, ICommonCommentCompact, IResponse } from "../common/types";
-import { IProfile, IProfileCompact } from "../profile/types";
+import { IBadge, IProfile, IProfileCompact } from "../profile/types";
 import {
   FilterGenresMode,
   FilterSort,
@@ -116,6 +116,9 @@ export interface IRelease {
   watching_count: number;
 
   year: string;
+
+  badge_count?: number;
+  badges_preview?: IBadge[];
 
   creation_date: number;
   last_update_date: number;

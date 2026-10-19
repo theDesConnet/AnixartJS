@@ -11,6 +11,9 @@ import {
   BookmarkType,
   BookmarksExportResult,
   ProfileResult,
+  BadgeAwardTrigger,
+  IPageableResponse,
+  ProfileBadgeShowcaseResult,
 } from "../";
 
 export interface IProfile {
@@ -20,6 +23,8 @@ export interface IProfile {
   status: string;
 
   badge: IBadge | null;
+  badge_count?: number;
+  badges_preview?: IBadge[];
 
   history: IRelease[];
   votes: IRelease[];
@@ -181,9 +186,50 @@ export interface IRole {
 export interface IBadge {
   id: number;
   name: string;
-  timestamp: number;
   type: number;
-  image_url: string;
+  timestamp: number;
+
+  badge_url?: string | null;
+  image_small_url?: string | null;
+  image_medium_url?: string | null;
+
+  /** @deprecated */
+  image_url?: string;
+
+  description?: string | null;
+  category?: IBadgeCategory | null;
+  rarity?: string | null;
+  award?: IBadgeAward | null;
+
+  is_available?: boolean | null;
+  is_owned?: boolean;
+  is_selected?: boolean;
+  is_showcased?: boolean;
+
+  ownership_percentage?: number | null;
+}
+
+export interface IBadgeCategory {
+  id: number;
+  title: string;
+}
+
+export interface IBadgeAward {
+  trigger: BadgeAwardTrigger | (string & {});
+
+  episode_name: string | null;
+  profile_list_status: number | null;
+
+  release_id: number | null;
+  release_image: string | null;
+  release_title: string | null;
+}
+
+export interface IBadgeSection {
+  id: number;
+  title: string;
+  count: number;
+  content: IBadge[];
 }
 
 export interface IWatchDynamics {
@@ -217,6 +263,11 @@ export type AppealStatus =
   | "SUBMITTED"
   | "ACCEPTED"
   | "REJECTED";
+
+export interface IAchievementPreview {
+  name: string;
+  badge: IBadge;
+}
 
 export interface IProfileEnforcement {
   type: EnforcementType;
@@ -315,8 +366,8 @@ export interface IProfileHealthStatusResponse extends IResponse {
 }
 
 export interface IProfileDeletionResponse extends IResponse<ProfileDeletionResult> {
-    delete_at: number;
-    requested_at: number;
+  delete_at: number;
+  requested_at: number;
 }
 
 export interface IProfilePreferenceResponse extends IResponse {
@@ -350,4 +401,35 @@ export interface IProfilePreferenceResponse extends IResponse {
 export interface IBookmarksExportResponse
   extends IResponse<BookmarksExportResult> {
   releases: IRelease[] | null;
+}
+
+export interface IProfileBadgeSectionsResponse
+  extends IResponse {
+  profile: IProfile;
+  recent: IBadge[];
+  sections: IBadgeSection[];
+  showcased: IBadge[];
+  total_count: number;
+}
+
+export interface IProfileBadgePageableResponse
+  extends IPageableResponse<IBadge> {
+  profile: IProfile;
+}
+
+export interface IProfileBadgeResponse
+  extends IResponse {
+  badge: IBadge;
+}
+
+export interface IProfileBadgeShowcaseResponse
+  extends IResponse<ProfileBadgeShowcaseResult> { }
+
+export interface IReorderBadgeShowcaseRequest {
+  ids: number[];
+}
+
+export interface IAchievementPreviewResponse
+  extends IResponse {
+  achievement: IAchievementPreview;
 }

@@ -3,6 +3,7 @@ export enum DeleteNotificationType {
   CollectionComment = "collectionComment",
   Episode = "episode",
   Friend = "friend",
+  Article = "article/delete",
   MyArticleComment = "my/article/comment",
   MyCollectionComment = "my/collection/comment",
   RelatedRelease = "related/release",

@@ -72,3 +72,8 @@ export enum ChannelSubscribeResult {
 export enum ChannelUnsubscribeResult {
   SubscriptionNotExists = 2,
 }
+
+export enum ChannelDeleteResult {
+  ChannelNotFound = 2,
+  ChannelNotOwned = 3,
+}
