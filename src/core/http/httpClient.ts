@@ -10,7 +10,7 @@ export class HttpClient {
     private readonly _userAgent: string,
     private readonly _throwOnAnixartError: boolean,
     private _token?: string,
-  ) {}
+  ) { }
 
   private hasResultCode(value: unknown): value is { code: number } {
     return (
@@ -127,9 +127,9 @@ export class HttpClient {
 
     const mergedHeaders = new Headers(headers);
 
-    new Headers(request.headers).forEach((value, name) => {
-      mergedHeaders.set(name, value);
-    });
+    for (const [name, value] of Object.entries(request.headers ?? {})) {
+      mergedHeaders.set(name, String(value));
+    }
 
     const timeoutSignal =
       request.timeoutMs === undefined
