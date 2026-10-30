@@ -18,6 +18,7 @@ export interface ICollection {
   is_deleted: boolean;
   is_favorite: boolean;
   releases: IRelease[];
+  cover_animation?: string;
 }
 
 export interface ICollectionResponse extends IResponse<CollectionResult> {

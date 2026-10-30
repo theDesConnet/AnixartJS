@@ -22,6 +22,8 @@ export interface IProfile {
   avatar: string;
   status: string;
 
+  avatar_animation?: string;
+
   badge: IBadge | null;
   badge_count?: number;
   badges_preview?: IBadge[];
@@ -339,6 +341,8 @@ export interface IProfileInfoResponse extends IResponse {
   sponsorship_expires: number;
   is_perm_banned: boolean;
   is_sponsor: boolean;
+  ban_expires: number;
+  is_banned: boolean;
 }
 
 export interface IProfileResponse extends IResponse<ProfileResult> {

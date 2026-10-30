@@ -22,6 +22,9 @@ export interface IChannel {
   cover: string | null;
   avatar: string | null;
 
+  cover_animation: string | null;
+  avatar_animation: string | null;
+
   permission: number;
 
   article_count: number;
@@ -56,10 +59,10 @@ export interface IChannel {
   block_expire_date: number | null;
   is_perm_blocked: boolean;
 
-  badge_id: number | null;
-  badge_name: string | null;
-  badge_type: number | null;
-  badge_url: string | null;
+  channel_badge_id: number | null;
+  channel_badge_name: string | null;
+  channel_badge_type: number | null;
+  channel_badge_url: string | null;
 
   last_article_date: number;
 

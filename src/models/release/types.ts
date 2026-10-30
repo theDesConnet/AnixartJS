@@ -70,6 +70,8 @@ export interface IRelease {
   note_text_color_light: string;
 
   plan_count: number;
+  poster_animation?: string;
+  screenshot_animations?: string[];
 
   profile_list_status: number;
   profile_release_type_notification_preference_count: number;
@@ -260,6 +262,7 @@ export interface IRelated {
   name: string;
   name_ru: string;
   release_count: number;
+  cover_animation?: string;
 }
 
 export interface IReleaseStreamingPlatform {
@@ -288,6 +291,7 @@ export interface IInteresting {
   type: number;
   action: string;
   isHidden: boolean;
+  image_animation?: string;
 }
 
 export interface IReleaseVideoAppealRequest {
@@ -368,5 +372,6 @@ export interface IReleaseVideoCategoriesResponse extends IResponse {
 }
 
 export interface ITypeResponse extends IResponse {
-  types: IDubber[]
+  types: IDubber[];
+  popular_type_ids?: number[];
 }
