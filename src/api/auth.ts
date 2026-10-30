@@ -1,4 +1,4 @@
-import type { CommonResult } from "../models";
+import type { CommonResult, IQrAuthCreateResponse, IQrAuthOpenResponse, IQrAuthStatusResponse, IResponse } from "../models";
 import type { IRequestOptions } from "../core/http/httpTypes";
 import { Anixart } from "../core/anixartClient";
 import {
@@ -23,6 +23,7 @@ import {
   IVerifyResponse,
   IVkResponse,
   IYandexResponse,
+  QrAuthResult,
   ResendResult,
   RestoreResendResult,
   RestoreResult,
@@ -81,6 +82,223 @@ export class Auth {
   }
 
   /**
+   * Подтверждение авторизации по QR коду.
+   *
+   * Коды результата: {@link CommonResult}, {@link QrAuthResult}.
+   *
+   * @param key - Ключ QR.
+   * @param pin - Пин QR
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Код ответа — {@link QrAuthResult}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.auth.confirmQrAuth(
+   *   "key",
+   *   "pin",
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.code);
+   */
+  public async confirmQrAuth(
+    key: string,
+    pin: string,
+    options: IRequestOptions = {},
+  ): Promise<IResponse<QrAuthResult>> {
+    return (
+      await this._client.http.request<IResponse<QrAuthResult>>({
+        path: `/auth/qr/confirm`,
+        method: "POST",
+        resultEnum: QrAuthResult,
+        body: {
+          type: "URL-Encoded",
+          data: {
+            key: key,
+            pin: pin
+          },
+        },
+        auth: {
+          type: "Anixart",
+          required: true
+        },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
+   * Создание авторизации через QR код.
+   *
+   * Коды результата: {@link CommonResult}, {@link QrAuthResult}.
+   *
+   * @param device - Название устройства.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Информация о QR коде — {@link IQrAuthCreateResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.auth.createQrAuth(
+   *   "device",
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result);
+   */
+  public async createQrAuth(
+    device: string,
+    options: IRequestOptions = {},
+  ): Promise<IQrAuthCreateResponse> {
+    return (
+      await this._client.http.request<IQrAuthCreateResponse>({
+        path: `/auth/qr/create`,
+        method: "POST",
+        resultEnum: QrAuthResult,
+        body: {
+          type: "URL-Encoded",
+          data: {
+            device: device
+          },
+        },
+        ...options,
+      })
+    ).data;
+  }
+  /**
+   * Отклонить запрос авторизации по QR коду.
+   *
+   * Коды результата: {@link CommonResult}, {@link QrAuthResult}.
+   *
+   * @param key - Ключ QR.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Код ответа — {@link QrAuthResult}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.auth.declineQrAuth(
+   *   "key",
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.code);
+   */
+  public async declineQrAuth(
+    key: string,
+    options: IRequestOptions = {},
+  ): Promise<IResponse<QrAuthResult>> {
+    return (
+      await this._client.http.request<IResponse<QrAuthResult>>({
+        path: `/auth/qr/decline`,
+        method: "POST",
+        resultEnum: QrAuthResult,
+        body: {
+          type: "URL-Encoded",
+          data: {
+            key: key
+          },
+        },
+        auth: {
+          type: "Anixart",
+          required: true
+        },
+        ...options,
+      })
+    ).data;
+  }
+  /**
+   * Посмотреть запрос авторизации по QR коду.
+   *
+   * Коды результата: {@link CommonResult}, {@link QrAuthResult}.
+   *
+   * @param key - Ключ QR.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Информация о запросе — {@link IQrAuthOpenResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.auth.openQrAuth(
+   *   "key",
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result);
+   */
+  public async openQrAuth(
+    key: string,
+    options: IRequestOptions = {},
+  ): Promise<IQrAuthOpenResponse> {
+    return (
+      await this._client.http.request<IQrAuthOpenResponse>({
+        path: `/auth/qr/open`,
+        method: "POST",
+        resultEnum: QrAuthResult,
+        body: {
+          type: "URL-Encoded",
+          data: {
+            key: key
+          },
+        },
+        auth: {
+          type: "Anixart",
+          required: true
+        },
+        ...options,
+      })
+    ).data;
+  }
+  /**
+   * Просмотр статуса авторизации по QR коду.
+   *
+   * Коды результата: {@link CommonResult}, {@link QrAuthResult}.
+   *
+   * @param key - Ключ QR.
+   * @param secret - Секретный ключ QR
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Статус QR кода — {@link IQrAuthStatusResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.auth.statusQrAuth(
+   *   "key",
+   *   "secret"
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.status);
+   */
+  public async statusQrAuth(
+    key: string,
+    secret: string,
+    options: IRequestOptions = {},
+  ): Promise<IQrAuthStatusResponse> {
+    return (
+      await this._client.http.request<IQrAuthStatusResponse>({
+        path: `/auth/qr/status`,
+        method: "POST",
+        resultEnum: QrAuthResult,
+        body: {
+          type: "URL-Encoded",
+          data: {
+            key: key,
+            secret: secret
+          },
+        },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
    * Получить название темы Firebase.
    *
    * Токен клиента передаётся в query, если задан.
@@ -117,6 +335,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link ResendResult}.
    *
    * @param data - Данные запроса — {@link IResendRequest}.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Срок действия кода подтверждения — {@link IResendResponse}.
    *
@@ -148,6 +367,7 @@ export class Auth {
    */
   public async resend(
     data: IResendRequest,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IResendResponse> {
     return (
@@ -158,6 +378,9 @@ export class Auth {
         body: {
           type: "URL-Encoded",
           data: { ...data },
+        },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
         },
         ...options,
       })
@@ -170,6 +393,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link RestoreResult}.
    *
    * @param data - Логин или почта для восстановления аккаунта.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Данные для следующего шага подтверждения — {@link IRestoreResponse}.
    *
@@ -188,6 +412,7 @@ export class Auth {
    */
   public async restore(
     data: string,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IRestoreResponse> {
     return (
@@ -201,6 +426,9 @@ export class Auth {
             data: data,
           },
         },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
+        },
         ...options,
       })
     ).data;
@@ -212,6 +440,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link RestoreResendResult}.
    *
    * @param data - Данные запроса — {@link IRestoreResendRequest}.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Срок действия кода подтверждения — {@link IRestoreResendResponse}.
    *
@@ -238,6 +467,7 @@ export class Auth {
    */
   public async restoreResend(
     data: IRestoreResendRequest,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IRestoreResendResponse> {
     return (
@@ -248,6 +478,9 @@ export class Auth {
         body: {
           type: "URL-Encoded",
           data: { ...data },
+        },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
         },
         ...options,
       })
@@ -522,6 +755,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link SignUpResult}.
    *
    * @param data - Данные запроса — {@link ISignUpRequest}.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Данные для подтверждения регистрации — {@link ISignUpResponse}.
    *
@@ -548,6 +782,7 @@ export class Auth {
    */
   public async signUp(
     data: ISignUpRequest,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<ISignUpResponse> {
     return (
@@ -558,6 +793,9 @@ export class Auth {
         body: {
           type: "URL-Encoded",
           data: { ...data },
+        },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
         },
         ...options,
       })
@@ -571,6 +809,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param googleIdToken - ID-токен Google.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link IGoogleResponse}.
    *
@@ -599,6 +838,7 @@ export class Auth {
   public async signUpWithGoogle(
     data: Omit<ISignUpRequest, "password">,
     googleIdToken: string,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IGoogleResponse> {
     return (
@@ -613,6 +853,9 @@ export class Auth {
             googleIdToken: googleIdToken,
           },
         },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
+        },
         ...options,
       })
     ).data;
@@ -625,6 +868,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param telegramIdToken - ID-токен Telegram.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link ITelegramResponse}.
    *
@@ -653,6 +897,7 @@ export class Auth {
   public async signUpWithTelegram(
     data: Omit<ISignUpRequest, "password">,
     telegramIdToken: string,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<ITelegramResponse> {
     return (
@@ -667,6 +912,9 @@ export class Auth {
             telegramIdToken: telegramIdToken,
           },
         },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
+        },
         ...options,
       })
     ).data;
@@ -679,6 +927,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param vkAccessToken - Токен доступа VK.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link IVkResponse}.
    *
@@ -707,6 +956,7 @@ export class Auth {
   public async signUpWithVk(
     data: Omit<ISignUpRequest, "password">,
     vkAccessToken: string,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IVkResponse> {
     return (
@@ -721,6 +971,9 @@ export class Auth {
             vkAccessToken: vkAccessToken,
           },
         },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
+        },
         ...options,
       })
     ).data;
@@ -733,6 +986,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param yandexAccessToken - Токен доступа Яндекса.
+   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link IYandexResponse}.
    *
@@ -761,6 +1015,7 @@ export class Auth {
   public async signUpWithYandex(
     data: Omit<ISignUpRequest, "password">,
     yandexAccessToken: string,
+    isLongCode: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IYandexResponse> {
     return (
@@ -774,6 +1029,9 @@ export class Auth {
             ...data,
             yandexAccessToken: yandexAccessToken,
           },
+        },
+        headers: {
+          "X-Long-Code": isLongCode ? 1 : 0
         },
         ...options,
       })

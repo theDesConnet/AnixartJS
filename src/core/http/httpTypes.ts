@@ -64,7 +64,7 @@ export interface HttpRequest<T = unknown> extends IRequestOptions {
 
   resultEnum?: Record<number, string>;
 
-  headers?: HeadersInit;
+  headers?: Record<string, string | number | boolean>;
 }
 
 export interface HttpResponse<T = unknown> {

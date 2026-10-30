@@ -1,5 +1,5 @@
 export enum DeleteNotificationType {
-  ArticleComment = "article/comment",
+  ArticleComment = "articleComment",
   CollectionComment = "collectionComment",
   Episode = "episode",
   Friend = "friend",

@@ -3,6 +3,8 @@ import { IProfile, IProfileToken } from "../profile/types";
 import {
   CheckLoginResult,
   GoogleResult,
+  QrAuthResult,
+  QrAuthStatus,
   ResendResult,
   RestoreResendResult,
   RestoreResult,
@@ -125,4 +127,23 @@ export interface IVkResponse extends IOAuthSignInResponse<VkResult> {}
 
 export interface IYandexResponse extends IOAuthSignInResponse<YandexResult> {
   email: string;
+}
+
+export interface IQrAuthCreateResponse extends IResponse<QrAuthResult> {
+  expires_in: number;
+  key: string;
+  pin: string;
+  poll_interval: number;
+  secret: string;
+}
+
+export interface IQrAuthStatusResponse extends IResponse<QrAuthResult> {
+  status: QrAuthStatus;
+}
+
+export interface IQrAuthOpenResponse extends IResponse<QrAuthResult> {
+  attempts_left: number;
+  country_code: string;
+  device: string;
+  expires_in: number;
 }

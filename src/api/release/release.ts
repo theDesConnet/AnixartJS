@@ -56,6 +56,42 @@ export class Release {
   }
 
   /**
+   * Получить релиз который можно продолжить смотреть.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param releaseId - ID релиза.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Релиз — {@link IReleaseResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const releaseId = 123;
+   *
+   * const result = await client.endpoints.release.continueWatching(
+   *   releaseId,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.release);
+   */
+  public async continueWatching(
+    releaseId: number,
+    options: IRequestOptions = {},
+  ): Promise<IReleaseResponse> {
+    return (
+      await this._client.http.request<IReleaseResponse>({
+        path: `/release/${releaseId}/continue`,
+        method: "GET",
+        auth: { type: "Anixart" },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
    * Получить случайный релиз.
    *
    * Токен клиента передаётся в query, если задан.

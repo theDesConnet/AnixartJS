@@ -464,6 +464,57 @@ export class Search {
   }
 
   /**
+   * Найти друзей в выбранном профиле.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param status - Список закладок — {@link BookmarkType}.
+   * @param data - Данные запроса — {@link ISearchRequest}.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   *
+   * @example
+   * import { Anixart, BookmarkType } from "anixartjs";
+   * import type { ISearchRequest } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const status = BookmarkType.Watching;
+   * const search: ISearchRequest = {
+   *   query: "приключения",
+   * };
+   * const page = 0;
+   *
+   * const result = await client.endpoints.search.profileList(
+   *   status,
+   *   search,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async profileFriends(
+    profileId: number,
+    data: ISearchRequest,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<IProfile>> {
+    return (
+      await this._client.http.request<IPageableResponse<IProfile>>({
+        path: `/search/profile/friends/${profileId}/${page}`,
+        method: "POST",
+        auth: { type: "Anixart" },
+        body: {
+          type: "JSON",
+          data: data,
+        },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
    * Найти релизы в выбранном списке закладок.
    *
    * Токен клиента передаётся в query, если задан.

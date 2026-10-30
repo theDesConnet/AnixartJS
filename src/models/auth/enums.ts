@@ -152,3 +152,17 @@ export enum VerifyResult {
   EmailServiceDisallowed = 10,
   TooManyRegistrations = 11,
 }
+
+export enum QrAuthResult {
+  Expired = 2,
+  Declined = 3,
+  TooManyAttempts = 4,
+  PinInvalid = 5,
+  TooManyRequests = 6,
+}
+
+export enum QrAuthStatus {
+  Waiting = 0,
+  Scanned = 1,
+  Confirmed = 2
+}
