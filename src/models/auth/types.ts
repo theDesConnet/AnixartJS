@@ -139,6 +139,8 @@ export interface IQrAuthCreateResponse extends IResponse<QrAuthResult> {
 
 export interface IQrAuthStatusResponse extends IResponse<QrAuthResult> {
   status: QrAuthStatus;
+  profile?: IProfile;
+  profileToken?: IProfileToken;
 }
 
 export interface IQrAuthOpenResponse extends IResponse<QrAuthResult> {
