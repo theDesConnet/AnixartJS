@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 export enum CheckLoginResult {
   InvalidLogin = 2,
 }
@@ -161,6 +170,7 @@ export enum QrAuthResult {
   TooManyRequests = 6,
 }
 
+/** Этап входа по QR: ожидание, сканирование или подтверждение. */
 export enum QrAuthStatus {
   Waiting = 0,
   Scanned = 1,

@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import { ChannelDeleteResult, CommonResult } from "../models";
 import type { IRequestOptions } from "../core/http/httpTypes";
 import { Anixart } from "../core/anixartClient";

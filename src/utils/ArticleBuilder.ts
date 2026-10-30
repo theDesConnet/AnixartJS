@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import { randomInt } from "node:crypto";
 import type {
   IArticle,

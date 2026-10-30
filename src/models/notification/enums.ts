@@ -1,3 +1,13 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Значения для удаления уведомлений; отличаются от type в ответе. */
 export enum DeleteNotificationType {
   ArticleComment = "articleComment",
   CollectionComment = "collectionComment",
@@ -10,6 +20,7 @@ export enum DeleteNotificationType {
   ReleaseComment = "releaseComment",
 }
 
+/** Значения для изменения отдельных настроек уведомлений. */
 export enum NotificationPreferenceEditType {
   Article = "article",
   Comment = "comment",
@@ -22,6 +33,7 @@ export enum NotificationPreferenceEditType {
   SelectedReleases = "selected/releases",
 }
 
+/** Заявка в друзья или её принятие. */
 export enum ProfileFriendNotificationStatus {
   Request = "REQUEST",
   Accept = "ACCEPT",

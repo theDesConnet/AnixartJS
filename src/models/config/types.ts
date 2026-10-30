@@ -1,9 +1,20 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Версия AnixPlayer и ссылки на загрузку. */
 export interface IAnixPlayerConfigResponse {
     download_links: Record<string, string>;
     last_version_code: number;
     whats_new: string;
 }
 
+/** Серверные настройки приложения: функции, версии и адреса сервисов. */
 export interface IToggleResponse {
     adBannerDelay: number;
     adBannerSizeType: number;
@@ -70,6 +81,7 @@ export interface IToggleResponse {
     consentRequired: boolean;
 }
 
+/** Адреса API и доступные способы авторизации. */
 export interface IConfigUrlsResponse{
     api_urls: string[];
     editor_url?: string;

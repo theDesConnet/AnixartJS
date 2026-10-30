@@ -1,3 +1,13 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Общие коды поля code в ответах API; это не HTTP-статусы. */
 export enum CommonResult {
   Ok = 0,
   UnexpectedError = 1,

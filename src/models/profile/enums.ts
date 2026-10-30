@@ -1,9 +1,20 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Статус дружбы между двумя профилями, включая направление заявки. */
 export enum FriendStatus {
   PendingFirstSecond = 0,
   PendingSecondFirst = 1,
   Friend = 2,
 }
 
+/** Уровень прав профиля в Anixart. */
 export enum PrivilegeLevel {
   None = 0,
   Member = 1,
@@ -13,6 +24,7 @@ export enum PrivilegeLevel {
   Developer = 5,
 }
 
+/** Разделы закладок; избранное настраивается отдельно. */
 export enum BookmarkType {
   Watching = 1,
   InPlans = 2,
@@ -21,6 +33,7 @@ export enum BookmarkType {
   Dropped = 5,
 }
 
+/** Порядок релизов в закладках. */
 export enum BookmarkSortType {
   NewToOldAddTime = 1,
   OldToNewAddTime = 2,
@@ -30,6 +43,7 @@ export enum BookmarkSortType {
   AlpabetInZToA = 6,
 }
 
+/** Коды отправки заявки: 2 и 3 означают подтверждение и отправку. */
 export enum SendFriendRequestResult {
   RequestConfirmed = 2,
   RequestSent = 3,
@@ -50,6 +64,7 @@ export enum ProfileDeletionResult {
     UnknownError = 7
 }
 
+/** Коды удаления заявки или существующей дружбы. */
 export enum RemoveFriendRequestResult {
   RequestRemoved = 2,
   FriendshipRemoved = 3,
@@ -90,6 +105,7 @@ export enum ProfileBadgeShowcaseResult {
   LimitReached = 3,
 }
 
+/** Событие, за которое выдаётся значок. */
 export enum BadgeAwardTrigger {
   ClaimCode = "CLAIM_CODE",
   EpisodeWatched = "EPISODE_WATCHED",

@@ -1,9 +1,19 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import { AnixartError } from "../errors/anixartError";
 import { HttpError } from "../errors/httpError";
 import type { HttpRequest, HttpResponse } from "./httpTypes";
 import { CommonResult } from "../../models/common/enums";
 import FormData from "form-data";
 
+/** Подготовка запросов, разбор JSON и проверка кодов результата API. */
 export class HttpClient {
   constructor(
     private _baseUrl: string,
@@ -41,6 +51,7 @@ export class HttpClient {
     );
   }
 
+  /** Выполняет запрос. Тип T описывает ответ, но не проверяет его структуру. */
   async request<T>(request: HttpRequest): Promise<HttpResponse<T>> {
     const url = new URL(request.path, request.customBaseUrl ?? this._baseUrl);
 
@@ -64,6 +75,7 @@ export class HttpClient {
     if (request.auth) {
       switch (request.auth.type) {
         case "Anixart":
+          // Anixart принимает токен в query, а не в заголовке Authorization.
           if (request.auth.required && !this._token) {
             throw new AnixartError(
               "Anixart token is required for this request",
@@ -120,6 +132,7 @@ export class HttpClient {
           headers["Content-Type"] =
             `multipart/form-data; boundary=${formData.getBoundary()}`;
           headers["Content-Length"] = String(formData.getLengthSync());
+          // fetch получает готовое тело: объект из пакета form-data ему не подходит.
           body = new Uint8Array(await formData.getBuffer());
           break;
       }
@@ -127,6 +140,7 @@ export class HttpClient {
 
     const mergedHeaders = new Headers(headers);
 
+    // Заголовки конкретного запроса имеют приоритет над собранными выше.
     for (const [name, value] of Object.entries(request.headers ?? {})) {
       mergedHeaders.set(name, String(value));
     }
@@ -135,6 +149,7 @@ export class HttpClient {
       request.timeoutMs === undefined
         ? undefined
         : AbortSignal.timeout(request.timeoutMs);
+    // Запрос отменяется как по таймауту, так и по внешнему сигналу.
     const signal = timeoutSignal
       ? request.signal
         ? AbortSignal.any([request.signal, timeoutSignal])
@@ -168,6 +183,7 @@ export class HttpClient {
 
     try {
       const result = JSON.parse(String(responseData)) as T;
+      // HTTP 200 не гарантирует успех: у API есть отдельное поле code.
       const successCodes = request.successCodes ?? [0];
 
       if (

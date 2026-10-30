@@ -1,3 +1,13 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Категория релиза по формату выпуска. */
 export enum ReleaseCategory {
   Unknown = 0,
   Series = 1,
@@ -6,11 +16,13 @@ export enum ReleaseCategory {
   Special = 6,
 }
 
+/** Тип реакции при голосовании. */
 export enum VoteType {
   Like = 2,
   Dislike = 1,
 }
 
+/** Состояние выхода релиза. */
 export enum ReleaseStatus {
   Unknown = 0,
   Finished = 1,
@@ -18,12 +30,14 @@ export enum ReleaseStatus {
   Announced = 3,
 }
 
+/** Способ объединения выбранных жанров в фильтре. */
 export enum FilterGenresMode {
   All = 0,
   Any = 1,
   Exclude = 2,
 }
 
+/** Возрастные ограничения для фильтра каталога. */
 export enum FilterAgeRating {
   LessThan13 = 1,
   MoreThan13 = 2,
@@ -31,6 +45,7 @@ export enum FilterAgeRating {
   MoreThan100 = 4,
 }
 
+/** Порядок релизов в результатах фильтра. */
 export enum FilterSort {
   DateUpdateDesc = 0,
   GradeDesc = 1,

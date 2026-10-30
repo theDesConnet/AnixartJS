@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import { ICommonComment, ICommonCommentCompact, IResponse } from "../common/types";
 import { IBadge, IProfile, IProfileCompact } from "../profile/types";
 import {
@@ -8,8 +17,10 @@ import {
   ReleaseVideoResult,
 } from "./enums";
 
+/** Пользовательская оценка релиза по пятибалльной шкале. */
 export type IReleaseVote = 1 | 2 | 3 | 4 | 5;
 
+/** Карточка релиза со статистикой и состоянием для текущего пользователя. */
 export interface IRelease {
   id: number;
 
@@ -129,12 +140,14 @@ export interface IRelease {
   my_vote: number;
 }
 
+/** Релиз в превью: ID, название и постер. */
 export interface IReleaseCompact {
   id: number;
   title_ru: string;
   image: string;
 }
 
+/** Данные о последнем обновлении серий релиза. */
 export interface IEpisodeUpdate {
   lastEpisodeTypeUpdateName: string;
   last_episode_source_update_id: number;
@@ -144,22 +157,26 @@ export interface IEpisodeUpdate {
   last_episode_update_name: string;
 }
 
+/** Статус выхода релиза: числовой код и название. */
 export interface IReleaseStatus {
   id: ReleaseStatus;
   name: string;
 }
 
+/** Комментарий к релизу с привязкой к серии. */
 export interface IReleaseComment extends ICommonComment<IProfileCompact> {
   release: IRelease;
   posted_at_episode: number;
 }
 
+/** Превью комментария с короткой карточкой релиза. */
 export interface IReleaseCommentCompact extends ICommonCommentCompact {
   release: IReleaseCompact;
   embeddableId: number;
   embeddableTitle: string;
 }
 
+/** Серия у конкретного источника и состояние её просмотра. */
 export interface IEpisode {
   id: number;
 
@@ -177,17 +194,20 @@ export interface IEpisode {
   name: string;
   url: string;
 
+  /** Ссылка ведёт на встраиваемый плеер. */
   iframe: boolean;
   is_filler: boolean;
   is_watched: boolean;
 }
 
+/** Серия в уведомлении: название, релиз и источник. */
 export interface IEpisodeCompact {
   name: string;
   release: IReleaseCompact;
   source: ISourceCompact;
 }
 
+/** Источник серий для выбранной озвучки или субтитров. */
 export interface ISource {
   episodes_count: number;
   id: number;
@@ -196,15 +216,18 @@ export interface ISource {
   type: IDubber;
 }
 
+/** Название источника и короткие данные об озвучке. */
 export interface ISourceCompact {
   name: string;
   type: IDubberCompact;
 }
 
+/** Озвучка, выбранная для уведомлений по релизу. */
 export interface IProfileReleaseTypeNotificationPreference {
   type: IDubber;
 }
 
+/** Озвучка или субтитры со статистикой доступных серий. */
 export interface IDubber {
   id: number;
 
@@ -220,12 +243,15 @@ export interface IDubber {
   view_count: number;
 }
 
+/** Название озвучки или субтитров для превью. */
 export interface IDubberCompact {
   name: string;
 }
 
+/** Дополнительное видео к релизу, например трейлер. */
 export interface IReleaseVideo {
   id: number;
+  /** В зависимости от ответа API приходит карточка релиза или только ID. */
   release: IRelease | number;
   profile: IProfile;
   category: {
@@ -246,6 +272,7 @@ export interface IReleaseVideo {
   favorites_count: number;
 }
 
+/** Баннер с действием в разделе видео релиза. */
 export interface IReleaseVideoBanner {
   name: string;
   image: string;
@@ -254,6 +281,7 @@ export interface IReleaseVideoBanner {
   is_new: boolean;
 }
 
+/** Группа связанных релизов. */
 export interface IRelated {
   description: string;
   id: number;
@@ -265,6 +293,7 @@ export interface IRelated {
   cover_animation?: string;
 }
 
+/** Ссылка на релиз на стриминговой площадке. */
 export interface IReleaseStreamingPlatform {
   id: number;
   release: IRelease;
@@ -273,16 +302,19 @@ export interface IReleaseStreamingPlatform {
   url: string;
 }
 
+/** Категория дополнительных видео. */
 export interface IReleaseVideoCategory {
   id: number;
   name: string;
 }
 
+/** Видео, сгруппированные по категории. */
 export interface IReleaseVideoBlock {
   videos: IReleaseVideo[];
   category: IReleaseVideoCategory;
 }
 
+/** Карточка раздела «Интересное» с действием при открытии. */
 export interface IInteresting {
   id: number;
   title: string;
@@ -294,6 +326,7 @@ export interface IInteresting {
   image_animation?: string;
 }
 
+/** Видео, предлагаемое для добавления к релизу. */
 export interface IReleaseVideoAppealRequest {
     categoryId: number;
     releaseId: number;
@@ -301,6 +334,7 @@ export interface IReleaseVideoAppealRequest {
     url: string;
 }
 
+/** Условия фильтрации каталога релизов. */
 export interface IFilterRequest {
   category_id?: number | null;
   country?: string | null;
@@ -329,26 +363,32 @@ export interface IFilterRequest {
   age_ratings?: number[];
 }
 
+/** Одна серия, выбранная методом API. */
 export interface IEpisodeTargetResponse extends IResponse {
   episode: IEpisode;
 }
 
+/** Список серий выбранного источника. */
 export interface IEpisodeResponse extends IResponse {
   episodes: IEpisode[];
 }
 
+/** Доступные озвучки и субтитры. */
 export interface IDubbersResponse extends IResponse {
   types: IDubber[];
 }
 
+/** Источники серий для выбранной озвучки. */
 export interface ISourcesResponse extends IResponse {
   sources: ISource[];
 }
 
+/** Полная карточка релиза. */
 export interface IReleaseResponse extends IResponse {
   release: IRelease;
 }
 
+/** Расписание релизов по дням недели. */
 export interface IScheduleResponse extends IResponse {
   monday: IRelease[];
   tuesday: IRelease[];
@@ -359,6 +399,7 @@ export interface IScheduleResponse extends IResponse {
   sunday: IRelease[];
 }
 
+/** Раздел видео релиза и доступность предложения новых видео. */
 export interface IReleaseVideoResponse extends IResponse<ReleaseVideoResult> {
   blocks: IReleaseVideoBlock[];
   can_appeal: boolean;
@@ -367,10 +408,12 @@ export interface IReleaseVideoResponse extends IResponse<ReleaseVideoResult> {
   streaming_platforms: IReleaseStreamingPlatform;
 }
 
+/** Категории, доступные при добавлении видео. */
 export interface IReleaseVideoCategoriesResponse extends IResponse {
   categories: IReleaseVideoCategory[];
 }
 
+/** Озвучки и необязательный список популярных ID. */
 export interface ITypeResponse extends IResponse {
   types: IDubber[];
   popular_type_ids?: number[];

@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 export enum ArticleResult {
   ArticleDeleted = 2,
 }
@@ -41,6 +50,7 @@ export enum ArticleSuggestionDeleteResult {
   ArticleSuggestionNotOwned = 3,
 }
 
+/** Раздел приложения, из которого открыли статью. */
 export enum ArticleEventEntryPoint {
   Unknown = "unknown",
   Article = "article",
@@ -50,6 +60,7 @@ export enum ArticleEventEntryPoint {
   Search = "search",
 }
 
+/** Действие со статьёй, отправляемое в статистику. */
 export enum ArticleEventType {
   View = "view",
   Open = "open",

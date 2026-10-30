@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import {
   IRelease,
   IReleaseComment,
@@ -16,6 +25,7 @@ import {
   ProfileBadgeShowcaseResult,
 } from "../";
 
+/** Полный профиль, включая статистику и настройки видимости. */
 export interface IProfile {
   id: number;
   login: string;
@@ -129,7 +139,9 @@ export interface IProfile {
   deletion_requested_at: number;
   deletion_delete_at: number;
 
+  /** Этот профиль находится в чёрном списке текущего пользователя. */
   is_blocked: boolean;
+  /** Текущий пользователь находится в чёрном списке этого профиля. */
   is_me_blocked: boolean;
   is_stats_hidden: boolean;
   is_counts_hidden: boolean;
@@ -138,6 +150,7 @@ export interface IProfile {
   is_online: boolean;
 }
 
+/** Профиль с данными о значке, привилегиях и блокировке. */
 export interface IProfileCompact {
   badge_id: number | null;
   badge_name: string | null;
@@ -159,32 +172,38 @@ export interface IProfileCompact {
   avatar: string;
 }
 
+/** Минимальная карточка автора: ID, логин и аватар. */
 export interface IProfileSlim {
   id: number;
   login: string;
   avatar: string;
 }
 
+/** Токен доступа и ID профиля, которому он принадлежит. */
 export interface IProfileToken {
   id: number;
   token: string;
 }
 
+/** Комментарий к релизу в превью профиля. */
 export type ICommentPreview = IReleaseComment & {
   commentType: "release";
 };
 
+/** Жанр, аудитория или тема с долей в предпочтениях профиля. */
 export interface IPreferredType {
   name: string;
   percentage: number;
 }
 
+/** Роль профиля с названием и цветом. */
 export interface IRole {
   id: number;
   name: string;
   color: string;
 }
 
+/** Значок; набор дополнительных полей зависит от метода API. */
 export interface IBadge {
   id: number;
   name: string;
@@ -211,12 +230,15 @@ export interface IBadge {
   ownership_percentage?: number | null;
 }
 
+/** Категория значка в каталоге. */
 export interface IBadgeCategory {
   id: number;
   title: string;
 }
 
+/** Условие выдачи значка и связанный с ним релиз. */
 export interface IBadgeAward {
+  /** Допускает новые значения сервера, которых ещё нет в enum. */
   trigger: BadgeAwardTrigger | (string & {});
 
   episode_name: string | null;
@@ -227,6 +249,7 @@ export interface IBadgeAward {
   release_title: string | null;
 }
 
+/** Раздел каталога значков со своим счётчиком. */
 export interface IBadgeSection {
   id: number;
   title: string;
@@ -234,6 +257,7 @@ export interface IBadgeSection {
   content: IBadge[];
 }
 
+/** Запись о количестве просмотров за день. */
 export interface IWatchDynamics {
   id: number;
   timestamp: number;
@@ -241,12 +265,14 @@ export interface IWatchDynamics {
   count: number;
 }
 
+/** Запись в истории смены логина. */
 export interface IChangeLogin {
   id: number;
   newLogin: string;
   timestamp: number;
 }
 
+/** Объект или действие, к которому применена мера модерации. */
 export type EnforcementType =
   | "profile_ban"
   | "channel_suspension"
@@ -257,8 +283,10 @@ export type EnforcementType =
   | "collection_comment_edit"
   | "article_comment_edit";
 
+/** Способ обжалования меры модерации. */
 export type AppealType = "UNKNOWN" | "NOT_AVAILABLE" | "MESSAGE" | "ADJUSTMENT";
 
+/** Текущее состояние апелляции. */
 export type AppealStatus =
   | "UNKNOWN"
   | "NOT_SUBMITTED"
@@ -266,11 +294,13 @@ export type AppealStatus =
   | "ACCEPTED"
   | "REJECTED";
 
+/** Достижение и значок, который за него выдаётся. */
 export interface IAchievementPreview {
   name: string;
   badge: IBadge;
 }
 
+/** Мера модерации с историей обжалования и отмены. */
 export interface IProfileEnforcement {
   type: EnforcementType;
   id: number;
@@ -286,16 +316,19 @@ export interface IProfileEnforcement {
   is_revoked: boolean;
 }
 
+/** Профиль в списке участников с ролями. */
 export interface IProfileRole extends IProfileCompact {
   is_online: boolean;
   roles: IRole[];
 }
 
+/** Тема, доступная для выбора в настройках. */
 export interface IAvailableTheme {
   id: number;
   name: string;
 }
 
+/** Параметры оформления профиля. */
 export interface ITheme {
   id: number;
   name: string;
@@ -321,10 +354,12 @@ export interface ITheme {
   theme_background_alpha: number | null;
 }
 
+/** Разделы закладок, выбранные для экспорта. */
 export interface IBookmarksExportRequest {
   bookmarksExportProfileLists: BookmarkType[];
 }
 
+/** ID релизов, разложенные по разделам закладок. */
 export interface IBookmarksImportRequest {
   selected_importer_name: string;
   watching: number[];
@@ -334,6 +369,7 @@ export interface IBookmarksImportRequest {
   holdOn: number[];
 }
 
+/** Сводка о привилегиях, спонсорстве и блокировке профиля. */
 export interface IProfileInfoResponse extends IResponse {
   channel_id: number | null;
   privilege_level: PrivilegeLevel;
@@ -345,21 +381,25 @@ export interface IProfileInfoResponse extends IResponse {
   is_banned: boolean;
 }
 
+/** Профиль и признак того, что он принадлежит текущему пользователю. */
 export interface IProfileResponse extends IResponse<ProfileResult> {
   is_my_profile: boolean;
   profile: IProfile;
 }
 
+/** Статус дружбы после запроса к API. */
 export interface IFriendStatusResponse<
   T extends number = CommonResult,
 > extends IResponse<T> {
   friend_status: FriendStatus;
 }
 
+/** Подробности одной меры модерации. */
 export interface IProfileEnforcementResponse extends IResponse {
   enforcement: IProfileEnforcement;
 }
 
+/** Сводка блокировок и ограничений профиля. */
 export interface IProfileHealthStatusResponse extends IResponse {
   ban_count: number;
   ban_for_3_month_count: number;
@@ -369,11 +409,13 @@ export interface IProfileHealthStatusResponse extends IResponse {
   blog_mute_expires: number;
 }
 
+/** Даты запроса и запланированного удаления профиля. */
 export interface IProfileDeletionResponse extends IResponse<ProfileDeletionResult> {
   delete_at: number;
   requested_at: number;
 }
 
+/** Текущие настройки профиля и ограничения на их изменение. */
 export interface IProfilePreferenceResponse extends IResponse {
   available_themes: IAvailableTheme[];
   avatar: string;
@@ -402,11 +444,13 @@ export interface IProfilePreferenceResponse extends IResponse {
   is_yandex_bound: boolean;
 }
 
+/** Релизы из выбранных разделов закладок. */
 export interface IBookmarksExportResponse
   extends IResponse<BookmarksExportResult> {
   releases: IRelease[] | null;
 }
 
+/** Каталог значков профиля, сгруппированный по разделам. */
 export interface IProfileBadgeSectionsResponse
   extends IResponse {
   profile: IProfile;
@@ -416,23 +460,29 @@ export interface IProfileBadgeSectionsResponse
   total_count: number;
 }
 
+/** Страница значков вместе с данными профиля. */
 export interface IProfileBadgePageableResponse
   extends IPageableResponse<IBadge> {
   profile: IProfile;
 }
 
+/** Данные одного значка. */
 export interface IProfileBadgeResponse
   extends IResponse {
   badge: IBadge;
 }
 
+/** Код результата изменения витрины значков. */
 export interface IProfileBadgeShowcaseResponse
   extends IResponse<ProfileBadgeShowcaseResult> { }
 
+/** ID значков в нужном порядке на витрине. */
 export interface IReorderBadgeShowcaseRequest {
+  /** Порядок ID задаёт порядок значков на витрине. */
   ids: number[];
 }
 
+/** Предпросмотр достижения перед получением. */
 export interface IAchievementPreviewResponse
   extends IResponse {
   achievement: IAchievementPreview;

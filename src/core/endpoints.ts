@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import type { Anixart } from "./anixartClient";
 
 import { Article } from "../api/article/article";
@@ -43,6 +52,7 @@ import { Search } from "../api/search";
 import { Type } from "../api/type";
 import { Achievement } from "../api/achievement";
 
+/** Разделы API используют один клиент и его текущие токен и адрес сервера. */
 export class Endpoints {
   public readonly article: Article;
   public readonly articleComment: ArticleComment;

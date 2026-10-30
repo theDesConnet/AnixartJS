@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 import {
   IProfileSlim,
   ArticleResult,
@@ -12,8 +21,10 @@ import {
 } from "../";
 
 
+/** Сервисы, поддерживаемые при вставке ссылки в статью. */
 export type EmbedType = "youtube" | "vk" | "link";
 
+/** Статья с содержимым, каналом и данными о реакциях. */
 export interface IArticle {
   "@id": number;
 
@@ -22,6 +33,7 @@ export interface IArticle {
   channel: IChannel;
   author: IProfileSlim | null;
 
+  /** Репост может прийти объектом, только ID или отсутствовать. */
   repost_article: IArticle | number | null;
   payload: IArticlePayload;
 
@@ -44,6 +56,7 @@ export interface IArticle {
   popular_comment: IPopularComment | null;
 }
 
+/** Короткая форма статьи без счётчиков и реакций. */
 export interface IArticleCompact {
   id: number;
   channel: IChannelCompact;
@@ -52,6 +65,7 @@ export interface IArticleCompact {
   last_update_date: number;
 }
 
+/** Превью комментария с данными статьи. */
 export interface IArticleCommentCompact extends ICommonCommentCompact {
   article: IArticleCompact;
   embeddableId: number;
@@ -59,17 +73,20 @@ export interface IArticleCommentCompact extends ICommonCommentCompact {
   embeddableDescription: string | null;
 }
 
+/** Текст абзаца и его длина по данным API. */
 export interface IArticleTextBlock {
   text: string;
   text_length: number;
 }
 
+/** Текст заголовка и его уровень. */
 export interface IArticleHeaderBlock {
   text: string;
   text_length: number;
   level: number;
 }
 
+/** Загруженное изображение с размерами и хешем. */
 export interface IArticleImageItem {
   id: string;
   url: string;
@@ -78,11 +95,13 @@ export interface IArticleImageItem {
   height: number;
 }
 
+/** Группа изображений в статье. */
 export interface IArticleImageBlock {
   items: IArticleImageItem[];
   item_count: number;
 }
 
+/** Цитата с подписью и выравниванием. */
 export interface IArticleQuoteBlock {
   text: string;
   caption: string;
@@ -91,12 +110,14 @@ export interface IArticleQuoteBlock {
   caption_length: number;
 }
 
+/** Список с заданным стилем отображения. */
 export interface IArticleListBlock {
   style: string;
   items: string[];
   item_count: number;
 }
 
+/** Данные предпросмотра встроенной ссылки или видео. */
 export interface IArticleEmbedBlock {
   url: string;
   hash: string;
@@ -110,8 +131,10 @@ export interface IArticleEmbedBlock {
   description: string;
 }
 
+/** Разделитель без дополнительных данных. */
 export interface IArticleDelimiterBlock {}
 
+/** Абзац в массиве блоков статьи. */
 export interface IArticleParagraphPayloadBlock {
   id: string;
   type: "paragraph";
@@ -119,6 +142,7 @@ export interface IArticleParagraphPayloadBlock {
   data: IArticleTextBlock;
 }
 
+/** Заголовок в массиве блоков статьи. */
 export interface IArticleHeaderPayloadBlock {
   id: string;
   type: "header";
@@ -126,6 +150,7 @@ export interface IArticleHeaderPayloadBlock {
   data: IArticleHeaderBlock;
 }
 
+/** Цитата в массиве блоков статьи. */
 export interface IArticleQuotePayloadBlock {
   id: string;
   type: "quote";
@@ -133,6 +158,7 @@ export interface IArticleQuotePayloadBlock {
   data: IArticleQuoteBlock;
 }
 
+/** Разделитель в массиве блоков статьи. */
 export interface IArticleDelimiterPayloadBlock {
   id: string;
   type: "delimiter";
@@ -140,6 +166,7 @@ export interface IArticleDelimiterPayloadBlock {
   data: IArticleDelimiterBlock;
 }
 
+/** Список в массиве блоков статьи. */
 export interface IArticleListPayloadBlock {
   id: string;
   type: "list";
@@ -147,6 +174,7 @@ export interface IArticleListPayloadBlock {
   data: IArticleListBlock;
 }
 
+/** Группа изображений в массиве блоков статьи. */
 export interface IArticleMediaPayloadBlock {
   id: string;
   type: "media";
@@ -154,6 +182,7 @@ export interface IArticleMediaPayloadBlock {
   data: IArticleImageBlock;
 }
 
+/** Встроенная ссылка или видео в массиве блоков статьи. */
 export interface IArticleEmbedPayloadBlock {
   id: string;
   type: "embed";
@@ -161,6 +190,7 @@ export interface IArticleEmbedPayloadBlock {
   data: IArticleEmbedBlock;
 }
 
+/** Блок статьи; поле type определяет форму data. */
 export type IArticlePayloadBlock =
   | IArticleParagraphPayloadBlock
   | IArticleHeaderPayloadBlock
@@ -170,24 +200,29 @@ export type IArticlePayloadBlock =
   | IArticleMediaPayloadBlock
   | IArticleEmbedPayloadBlock;
 
+/** Содержимое статьи в формате блочного редактора. */
 export interface IArticlePayload {
   time: number;
   version: string;
+  /** Блоки в порядке отображения в статье. */
   blocks: IArticlePayloadBlock[];
   block_count: number;
 }
 
+/** Содержимое статьи, подпись автора и ID репоста. */
 export interface IArticleCreateEditRequest {
   is_signed: boolean;
   repost_article_id: number | null;
   payload: IArticlePayload;
 }
 
+/** Предложенная статья; репосты в этом запросе не передаются. */
 export interface IArticleSuggestionCreateEditRequest extends Omit<
   IArticleCreateEditRequest,
   "repost_article_id"
 > {}
 
+/** Комментарий, выбранный для превью под статьёй. */
 export interface IPopularComment {
   id: number;
   profile: IProfileSlim | null;
@@ -196,31 +231,37 @@ export interface IPopularComment {
   timestamp: number;
 }
 
+/** Комментарий к статье с правами автора в канале. */
 export interface IArticleComment extends ICommonComment<IChannelProfile> {
   article: IArticle | number;
 }
 
+/** Событие взаимодействия со статьями и место, откуда оно пришло. */
 export interface IArticleEventRequest {
   type: ArticleEventType;
   entry_point: ArticleEventEntryPoint;
   articles: number[];
 }
 
+/** Статья с кодом результата операции. */
 export interface IArticleResponse<
   T extends number = ArticleResult,
 > extends IResponse<T> {
   article: IArticle;
 }
 
+/** Результат получения предпросмотра ссылки для редактора. */
 export interface IArticleEmbedResponse extends IArticleEmbedBlock {
   success: number;
 }
 
+/** Загруженный файл в формате ответа редактора. */
 export interface IArticleUploadFileResponse {
   file: IArticleImageItem;
   success: number;
 }
 
+/** ID последней статьи. */
 export interface ILatestArticleResponse extends IResponse {
   articleId: number;
 }

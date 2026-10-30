@@ -1,9 +1,20 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Кому видны данные профиля. */
 export enum PrivacyState {
     All = 0,
     OnlyFriends = 1,
     OnlyMe = 2
 }
 
+/** Кто может отправлять заявки в друзья. */
 export enum PrivacyFriendRequestState {
     All = 0,
     OnlyMe = 1

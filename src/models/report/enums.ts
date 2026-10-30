@@ -1,3 +1,13 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
+/** Объект жалобы; определяет маршрут API и тип данных. */
 export enum ReportType {
   Article = "article",
   ArticleComment = "comment/article",

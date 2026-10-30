@@ -1,3 +1,12 @@
+/**
+ * ╔══════════════════════════════════════════════════╗
+ * ║                    AnixartJS                     ║
+ * ║    https://github.com/theDesConnet/AnixartJS     ║
+ * ║          Licensed under GPL-2.0 License          ║
+ * ║                   by DesConnet                   ║
+ * ╚══════════════════════════════════════════════════╝
+ */
+
 export { Anixart, type IAnixartOptions } from "./core/anixartClient";
 export type { IRequestOptions } from "./core/http/httpTypes";
 export * from "./utils/ArticleBuilder";
