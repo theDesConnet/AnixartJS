@@ -7,10 +7,10 @@
  * ╚══════════════════════════════════════════════════╝
  */
 
-import type { CommonResult } from "../models";
 import type { IRequestOptions } from "../core/http/httpTypes";
 import { Anixart } from "../core/anixartClient";
 import {
+  IDiscoverHubResponse,
   IInteresting,
   IPageableResponse,
   IRelease,
@@ -18,9 +18,54 @@ import {
 } from "../models";
 
 export class Discover {
-  public constructor(private readonly _client: Anixart) {}
+  public constructor(private readonly _client: Anixart) { }
 
   /**
+   * Объединённая страница рекомендаций.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param recommendationsPreviousPage - Предыдущая страница рекомендаций По умолчанию: -1.
+   * @param collectionsPreviousPage - Предыдущая страница коллекций (по умолчанию: -1)
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Объединённые рекомендации, коллекции и данные пагинации — {@link IDiscoverHubResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({});
+   *
+   * const result = await client.endpoints.discover.hub(
+   *   -1,
+   *   -1,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result);
+   */
+  public async hub(
+    recommendationsPreviousPage: number = -1,
+    collectionsPreviousPage: number = -1,
+    options: IRequestOptions = {},
+  ): Promise<IDiscoverHubResponse> {
+    return (
+      await this._client.http.request<IDiscoverHubResponse>({
+        path: "/discover/hub",
+        method: "GET",
+        auth: {
+          type: "Anixart"
+        },
+        query: {
+          recommendations_previous_page: recommendationsPreviousPage,
+          collections_previous_page: collectionsPreviousPage
+        },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
+   * @deprecated В Anixart v11.3 (Beta) данный метод был убран.
+   * 
    * Получить популярные комментарии к релизам.
    *
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
@@ -49,6 +94,8 @@ export class Discover {
   }
 
   /**
+   * @deprecated В Anixart v11.3 (Beta) данный метод был убран.
+   * 
    * Получить наиболее обсуждаемые релизы.
    *
    * Токен клиента передаётся в query, если задан.
@@ -80,6 +127,8 @@ export class Discover {
   }
 
   /**
+   * @deprecated В Anixart v11.3 (Beta) данный метод был убран.
+   * 
    * Получить элементы раздела «Интересное».
    *
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.

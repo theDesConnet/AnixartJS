@@ -7,7 +7,7 @@
  * ╚══════════════════════════════════════════════════╝
  */
 
-import type { CommonResult } from "../../models";
+import type { CommonResult, ICollectionHubResponse } from "../../models";
 import type { IRequestOptions } from "../../core/http/httpTypes";
 import { Anixart } from "../../core/anixartClient";
 import {
@@ -55,6 +55,39 @@ export class Collection {
         method: "GET",
         auth: { type: "Anixart" },
         resultEnum: CollectionResult,
+        ...options,
+      })
+    ).data;
+  }
+
+    /**
+   * Главная страница коллекций.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * Коды результата: {@link CommonResult}.
+   *
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Свои коллекции, их количество, рекомендации и подборка недели — {@link ICollectionHubResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const result = await client.endpoints.collection.hub(
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.my, result.my_count, result.recommended, result.weekly);
+   */
+  public async hub(
+    options: IRequestOptions = {},
+  ): Promise<ICollectionHubResponse> {
+    return (
+      await this._client.http.request<ICollectionHubResponse>({
+        path: `/collection/hub`,
+        method: "GET",
+        auth: { type: "Anixart" },
         ...options,
       })
     ).data;
@@ -115,6 +148,8 @@ export class Collection {
    * Токен клиента передаётся в query, если задан.
    *
    * @param profileId - ID профиля.
+   * @param sort - Порядок сортировки. Необязательный параметр.
+   * @param releaseId - ID релиза для фильтрации коллекций. Необязательный параметр.
    * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Страница результатов — {@link IPageableResponse} с элементами {@link ICollection}.
@@ -129,6 +164,8 @@ export class Collection {
    *
    * const result = await client.endpoints.collection.profileCollections(
    *   profileId,
+   *   undefined,
+   *   undefined,
    *   page,
    *   { timeoutMs: 15_000 },
    * );
@@ -136,6 +173,8 @@ export class Collection {
    */
   public async profileCollections(
     profileId: number,
+    sort?: number,
+    releaseId?: number,
     page: number = 0,
     options: IRequestOptions = {},
   ): Promise<IPageableResponse<ICollection>> {
@@ -144,6 +183,10 @@ export class Collection {
         path: `/collection/all/profile/${profileId}/${page}`,
         method: "GET",
         auth: { type: "Anixart" },
+        query: {
+          sort,
+          release_id: releaseId
+        },
         ...options,
       })
     ).data;
@@ -157,6 +200,7 @@ export class Collection {
    * @param releaseId - ID релиза.
    * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
    * @param sort - Порядок сортировки.
+   * @param friends - Фильтровать коллекции по друзьям. Необязательный параметр.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Страница результатов — {@link IPageableResponse} с элементами {@link ICollection}.
    *
@@ -173,6 +217,7 @@ export class Collection {
    *   releaseId,
    *   page,
    *   sort,
+   *   undefined,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.content);
@@ -181,6 +226,7 @@ export class Collection {
     releaseId: number,
     page: number = 0,
     sort: number,
+    friends?: boolean,
     options: IRequestOptions = {},
   ): Promise<IPageableResponse<ICollection>> {
     return (
@@ -190,6 +236,7 @@ export class Collection {
         auth: { type: "Anixart" },
         query: {
           sort: sort,
+          friends
         },
         ...options,
       })

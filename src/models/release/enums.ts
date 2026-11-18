@@ -77,3 +77,8 @@ export enum ReleaseVideoAppealResult {
   AppealNotFound = 9,
   AppealDisabled = 10,
 }
+
+export enum EpisodeDownloadTargetResult {
+  DownloadRestricted = 2,
+  DownloadSourceRestricted = 3,
+}

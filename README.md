@@ -68,6 +68,7 @@ async function main() {
   const { release } = await client.endpoints.release.get(
     101,
     true,
+    true,
     { timeoutMs: 15_000 }
   );
 
@@ -221,6 +222,7 @@ client.endpoints.search
 ```typescript
 const { release } = await client.endpoints.release.get(
   101,
+  true,
   true,
   { timeoutMs: 15_000 }
 );

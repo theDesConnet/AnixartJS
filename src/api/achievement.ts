@@ -15,14 +15,14 @@ export class Achievement {
   public constructor(private readonly _client: Anixart) {}
 
   /**
-   * Получить достижения
+   * Получить достижение по коду.
    *
    * Токен клиента передаётся в query, если задан.
    *
-   * @param code - Код достижения
-   * @param badgeId - ID значка
+   * @param code - Код достижения.
+   * @param badgeId - ID значка.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
-   * @returns Ответ API — {@link IResponse} с кодом {@link AchivementResult}.
+   * @returns Ответ API — {@link IResponse} с кодом {@link AchievementResult}.
    *
    * @remarks
    * Необязательные аргументы пропущены через `undefined`, чтобы передать `options` последним.
@@ -61,22 +61,22 @@ export class Achievement {
   }
 
   /**
-   * Получить ID последней статьи ленты.
+   * Получить предпросмотр достижения по коду.
    *
-   * Токен клиента передаётся в query, если задан.
-   *
+   * @param code - Код достижения.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
-   * @returns ID последней статьи — {@link ILatestArticleResponse}.
+   * @returns Предпросмотр достижения — {@link IAchievementPreviewResponse}.
    *
    * @example
    * import { Anixart } from "anixartjs";
    *
-   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   * const client = new Anixart({});
    *
-   * const result = await client.endpoints.feed.latestArticle(
+   * const result = await client.endpoints.achievement.preview(
+   *   "CODE",
    *   { timeoutMs: 15_000 },
    * );
-   * console.log(result.articleId);
+   * console.log(result.achievement);
    */
   public async preview(code: string, options: IRequestOptions = {}): Promise<IAchievementPreviewResponse> {
     return (

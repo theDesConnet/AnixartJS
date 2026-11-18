@@ -51,3 +51,12 @@ export enum CollectionDeleteResult {
   CollectionNotOwned = 3,
   CollectionDeleted = 4,
 }
+
+export enum ReleaseRemoveCollectionResult {
+  CollectionNotFound = 2,
+  CollectionNotOwned = 3,
+  InvalidRelease = 4,
+  ReleaseNotInCollection = 5,
+  CollectionDeleted = 6,
+  LastRelease = 7,
+}

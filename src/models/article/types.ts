@@ -209,6 +209,21 @@ export interface IArticlePayload {
   block_count: number;
 }
 
+export interface IArticleLimits {
+  max_block_count: number | null;
+  max_header_text_length: number | null;
+  max_list_item_count: number | null;
+  max_list_item_text_length: number | null;
+  max_media_item_count: number | null;
+  max_paragraph_text_length: number | null;
+  max_quote_caption_length: number | null;
+  max_quote_line_break_count: number | null;
+  max_quote_serialized_text_length: number | null;
+  max_quote_text_length: number | null;
+  max_quote_total_href_length: number | null;
+  max_tag_count: number | null;
+}
+
 /** Содержимое статьи, подпись автора и ID репоста. */
 export interface IArticleCreateEditRequest {
   is_signed: boolean;

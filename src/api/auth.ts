@@ -269,7 +269,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link QrAuthResult}.
    *
    * @param key - Ключ QR.
-   * @param secret - Секретный ключ QR
+   * @param secret - Секретный ключ QR.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Статус QR кода — {@link IQrAuthStatusResponse}.
    *
@@ -280,7 +280,7 @@ export class Auth {
    *
    * const result = await client.endpoints.auth.statusQrAuth(
    *   "key",
-   *   "secret"
+   *   "secret",
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.status);
@@ -344,7 +344,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link ResendResult}.
    *
    * @param data - Данные запроса — {@link IResendRequest}.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Срок действия кода подтверждения — {@link IResendResponse}.
    *
@@ -370,6 +370,7 @@ export class Auth {
    *
    * const result = await client.endpoints.auth.resend(
    *   verification,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.timestampExpires);
@@ -402,7 +403,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link RestoreResult}.
    *
    * @param data - Логин или почта для восстановления аккаунта.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Данные для следующего шага подтверждения — {@link IRestoreResponse}.
    *
@@ -415,6 +416,7 @@ export class Auth {
    *
    * const result = await client.endpoints.auth.restore(
    *   account,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.codeTimestampExpires);
@@ -449,7 +451,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link RestoreResendResult}.
    *
    * @param data - Данные запроса — {@link IRestoreResendRequest}.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Срок действия кода подтверждения — {@link IRestoreResendResponse}.
    *
@@ -470,6 +472,7 @@ export class Auth {
    *
    * const result = await client.endpoints.auth.restoreResend(
    *   recovery,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.timestampExpires);
@@ -764,7 +767,7 @@ export class Auth {
    * Коды результата: {@link CommonResult}, {@link SignUpResult}.
    *
    * @param data - Данные запроса — {@link ISignUpRequest}.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Данные для подтверждения регистрации — {@link ISignUpResponse}.
    *
@@ -785,6 +788,7 @@ export class Auth {
    *
    * const result = await client.endpoints.auth.signUp(
    *   registration,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.codeTimestampExpires);
@@ -818,7 +822,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param googleIdToken - ID-токен Google.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link IGoogleResponse}.
    *
@@ -840,6 +844,7 @@ export class Auth {
    * const result = await client.endpoints.auth.signUpWithGoogle(
    *   settings,
    *   googleIdToken,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.codeTimestampExpires);
@@ -877,7 +882,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param telegramIdToken - ID-токен Telegram.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link ITelegramResponse}.
    *
@@ -899,6 +904,7 @@ export class Auth {
    * const result = await client.endpoints.auth.signUpWithTelegram(
    *   settings,
    *   telegramIdToken,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.codeTimestampExpires);
@@ -936,7 +942,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param vkAccessToken - Токен доступа VK.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link IVkResponse}.
    *
@@ -958,6 +964,7 @@ export class Auth {
    * const result = await client.endpoints.auth.signUpWithVk(
    *   settings,
    *   vkAccessToken,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.codeTimestampExpires);
@@ -995,7 +1002,7 @@ export class Auth {
    *
    * @param data - Данные запроса — {@link ISignUpRequest} без пароля.
    * @param yandexAccessToken - Токен доступа Яндекса.
-   * @param isLongCode - Использовать ли длинный код (Включено по умолчанию)
+   * @param isLongCode - Использовать длинный код подтверждения. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Результат входа или данные для продолжения регистрации — {@link IYandexResponse}.
    *
@@ -1017,6 +1024,7 @@ export class Auth {
    * const result = await client.endpoints.auth.signUpWithYandex(
    *   settings,
    *   yandexAccessToken,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.email);

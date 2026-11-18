@@ -22,14 +22,14 @@ export class ProfileHealth {
   public constructor(private readonly _client: Anixart) {}
 
   /**
-   * Получить страницу ограничений аккаунта.
+   * Получить ограничения аккаунта.
    *
    * Токен клиента передаётся в query, если задан.
    *
    * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
-   * @returns Массив ограничений или страница — {@link IPageableResponse} с элементами {@link IProfileEnforcement}.
-   * @remarks При отсутствии ограничений сервер возвращает пустой массив, а не объект пагинации.
+   * @returns Массив ограничений — {@link IProfileEnforcement}[].
+   * @remarks При отсутствии ограничений возвращается пустой массив.
    *
    * @example
    * import { Anixart } from "anixartjs";
@@ -42,7 +42,7 @@ export class ProfileHealth {
    *   page,
    *   { timeoutMs: 15_000 },
    * );
-   * console.log(Array.isArray(result) ? result : result.content);
+   * console.log(result);
    */
   public async account(
     page: number = 0,
@@ -105,14 +105,14 @@ export class ProfileHealth {
   }
 
   /**
-   * Получить страницу действий модерации над контентом.
+   * Получить действия модерации над контентом.
    *
    * Токен клиента передаётся в query, если задан.
    *
    * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
-   * @returns Массив действий или страница — {@link IPageableResponse} с элементами {@link IProfileEnforcement}.
-   * @remarks При отсутствии действий сервер возвращает пустой массив, а не объект пагинации.
+   * @returns Массив действий — {@link IProfileEnforcement}[].
+   * @remarks При отсутствии действий возвращается пустой массив.
    *
    * @example
    * import { Anixart } from "anixartjs";
@@ -125,7 +125,7 @@ export class ProfileHealth {
    *   page,
    *   { timeoutMs: 15_000 },
    * );
-   * console.log(Array.isArray(result) ? result : result.content);
+   * console.log(result);
    */
   public async content(
     page: number = 0,

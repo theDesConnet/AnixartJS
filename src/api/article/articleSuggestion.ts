@@ -25,6 +25,8 @@ export class ArticleSuggestion {
   public constructor(private readonly _client: Anixart) {}
 
   /**
+   * @deprecated В Anixart v11.3 (Beta) данный метод был убран.
+   * 
    * Получить предложенную статью по ID.
    *
    * Токен клиента передаётся в query, если задан.

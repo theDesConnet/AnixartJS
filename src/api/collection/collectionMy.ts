@@ -7,7 +7,7 @@
  * ╚══════════════════════════════════════════════════╝
  */
 
-import type { CommonResult } from "../../models";
+import type { CommonResult, ICollection, IReleaseAddCollectionResponse, IReleaseRemoveCollectionResponse } from "../../models";
 import type { IRequestOptions } from "../../core/http/httpTypes";
 import { Anixart } from "../../core/anixartClient";
 import {
@@ -21,6 +21,7 @@ import {
   IRelease,
   IResponse,
   ReleaseAddCollectionResult,
+  ReleaseRemoveCollectionResult,
 } from "../../models";
 
 export class CollectionMy {
@@ -248,7 +249,7 @@ export class CollectionMy {
    * @param collectionId - ID коллекции.
    * @param releaseId - ID релиза.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
-   * @returns Ответ API — {@link IResponse} с кодами {@link ReleaseAddCollectionResult}.
+   * @returns Ответ API — {@link IReleaseAddCollectionResponse} с кодами {@link ReleaseAddCollectionResult}.
    *
    * @example
    * import { Anixart } from "anixartjs";
@@ -269,13 +270,59 @@ export class CollectionMy {
     collectionId: number,
     releaseId: number,
     options: IRequestOptions = {},
-  ): Promise<IResponse<ReleaseAddCollectionResult>> {
+  ): Promise<IReleaseAddCollectionResponse> {
     return (
-      await this._client.http.request<IResponse<ReleaseAddCollectionResult>>({
+      await this._client.http.request<IReleaseAddCollectionResponse>({
         path: `/collectionMy/release/add/${collectionId}`,
         method: "GET",
         auth: { type: "Anixart" },
         resultEnum: ReleaseAddCollectionResult,
+        query: {
+          release_id: releaseId,
+        },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
+   * Удалить релиз из коллекции.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * Коды результата: {@link CommonResult}, {@link ReleaseRemoveCollectionResult}.
+   *
+   * @param collectionId - ID коллекции.
+   * @param releaseId - ID релиза.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Ответ API — {@link IReleaseRemoveCollectionResponse} с кодами {@link ReleaseRemoveCollectionResult}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const collectionId = 123;
+   * const releaseId = 123;
+   *
+   * const result = await client.endpoints.collectionMy.releaseRemove(
+   *   collectionId,
+   *   releaseId,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.code);
+   */
+  public async releaseRemove(
+    collectionId: number,
+    releaseId: number,
+    options: IRequestOptions = {},
+  ): Promise<IReleaseRemoveCollectionResponse> {
+    return (
+      await this._client.http.request<IReleaseRemoveCollectionResponse>({
+        path: `/collectionMy/release/remove/${collectionId}`,
+        method: "GET",
+        auth: { type: "Anixart" },
+        resultEnum: ReleaseRemoveCollectionResult,
         query: {
           release_id: releaseId,
         },
@@ -313,6 +360,46 @@ export class CollectionMy {
     return (
       await this._client.http.request<IPageableResponse<IRelease>>({
         path: `/collectionMy/${collectionId}/releases`,
+        method: "GET",
+        auth: { type: "Anixart" },
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
+   * Свои коллекции для релиза.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param releaseId - ID релиза.
+   * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link ICollection}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const releaseId = 123;
+   * const page = 0;
+   *
+   * const result = await client.endpoints.collectionMy.releaseCollections(
+   *   releaseId,
+   *   page,
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.content);
+   */
+  public async releaseCollections(
+    releaseId: number,
+    page: number = 0,
+    options: IRequestOptions = {},
+  ): Promise<IPageableResponse<ICollection>> {
+    return (
+      await this._client.http.request<IPageableResponse<ICollection>>({
+        path: `/collectionMy/all/release/${releaseId}/${page}`,
         method: "GET",
         auth: { type: "Anixart" },
         ...options,

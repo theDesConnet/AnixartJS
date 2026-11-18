@@ -7,9 +7,11 @@
  * ╚══════════════════════════════════════════════════╝
  */
 
+import { ICollection } from "../collection/types";
 import { ICommonComment, ICommonCommentCompact, IResponse } from "../common/types";
 import { IBadge, IProfile, IProfileCompact } from "../profile/types";
 import {
+  EpisodeDownloadTargetResult,
   FilterGenresMode,
   FilterSort,
   ReleaseCategory,
@@ -124,6 +126,8 @@ export interface IRelease {
   vote_5_count: number;
   vote_count: number;
 
+  restriction_note: string | null;
+
   voted_at: number;
 
   watching_count: number;
@@ -214,6 +218,8 @@ export interface ISource {
   name: string;
   quality: number;
   type: IDubber;
+  download_speed_limit: number;
+  is_download_disabled: boolean;
 }
 
 /** Название источника и короткие данные об озвучке. */
@@ -326,6 +332,12 @@ export interface IInteresting {
   image_animation?: string;
 }
 
+export interface IWatchedSource {
+  release_id: number;
+  source_id: number;
+  positions: number[];
+}
+
 /** Видео, предлагаемое для добавления к релизу. */
 export interface IReleaseVideoAppealRequest {
     categoryId: number;
@@ -364,8 +376,9 @@ export interface IFilterRequest {
 }
 
 /** Одна серия, выбранная методом API. */
-export interface IEpisodeTargetResponse extends IResponse {
+export interface IEpisodeTargetResponse extends IResponse<EpisodeDownloadTargetResult> {
   episode: IEpisode;
+  download_speed_limit: number;
 }
 
 /** Список серий выбранного источника. */
@@ -417,4 +430,24 @@ export interface IReleaseVideoCategoriesResponse extends IResponse {
 export interface ITypeResponse extends IResponse {
   types: IDubber[];
   popular_type_ids?: number[];
+}
+
+/** Объединённая страница рекомендаций. */
+export interface IDiscoverHubResponse extends IResponse {
+  collections: ICollection[] | null;
+  collections_page: number;
+  collections_page_count: number;
+
+  comments: IReleaseComment[] | null;
+  discussing: IRelease[] | null;
+  interesting: IInteresting[] | null;
+
+  recommendations: IRelease[] | null;
+  recommendations_page: number;
+
+  watching: IRelease[] | null;
+}
+
+export interface IEpisodeWatchedResponse extends IResponse {
+  sources: IWatchedSource[] | null;
 }

@@ -10,17 +10,19 @@
 import type { IRequestOptions } from "../../core/http/httpTypes";
 import { Anixart } from "../../core/anixartClient";
 import {
+  EpisodeDownloadTargetResult,
   IDubbersResponse,
   IEpisodeResponse,
   IEpisodeTargetResponse,
   IEpisodeUpdate,
+  IEpisodeWatchedResponse,
   IPageableResponse,
   IResponse,
   ISourcesResponse,
 } from "../../models";
 
 export class Episode {
-  public constructor(private readonly _client: Anixart) {}
+  public constructor(private readonly _client: Anixart) { }
 
   /**
    * Получить информацию о конкретной серии источника.
@@ -28,6 +30,7 @@ export class Episode {
    * @param releaseId - ID релиза.
    * @param sourceId - ID источника серий.
    * @param position - Позиция серии в источнике; значение 0 передаётся без изменений.
+   * @param download - Получение эпизода для загрузки (по умолчанию: false).
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Серия — {@link IEpisodeTargetResponse}.
    *
@@ -44,6 +47,7 @@ export class Episode {
    *   releaseId,
    *   sourceId,
    *   position,
+   *   false,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.episode);
@@ -52,12 +56,17 @@ export class Episode {
     releaseId: number,
     sourceId: number,
     position: number,
+    download: boolean = false,
     options: IRequestOptions = {},
   ): Promise<IEpisodeTargetResponse> {
     return (
       await this._client.http.request<IEpisodeTargetResponse>({
         path: `/episode/target/${releaseId}/${sourceId}/${position}`,
         method: "GET",
+        query: {
+          download
+        },
+        resultEnum: EpisodeDownloadTargetResult,
         ...options,
       })
     ).data;
@@ -457,6 +466,45 @@ export class Episode {
       await this._client.http.request<IPageableResponse<IEpisodeUpdate>>({
         path: `/episode/updates/${releaseId}/${page}`,
         method: "GET",
+        ...options,
+      })
+    ).data;
+  }
+
+  /**
+   * Получить отметки просмотра серий для выбранных релизов.
+   *
+   * Токен клиента передаётся в query, если задан.
+   *
+   * @param releaseIds - ID релизов; передаются в release_ids строкой через запятую.
+   * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
+   * @returns Источники с ID релизов и позициями просмотренных серий — {@link IEpisodeWatchedResponse}.
+   *
+   * @example
+   * import { Anixart } from "anixartjs";
+   *
+   * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
+   *
+   * const result = await client.endpoints.episode.watched(
+   *   [123, 456],
+   *   { timeoutMs: 15_000 },
+   * );
+   * console.log(result.sources);
+   */
+  public async watched(
+    releaseIds: number[],
+    options: IRequestOptions = {},
+  ): Promise<IEpisodeWatchedResponse> {
+    return (
+      await this._client.http.request<IEpisodeWatchedResponse>({
+        path: `/episode/watched`,
+        method: "GET",
+        auth: {
+          type: "Anixart"
+        },
+        query: {
+          "release_ids": releaseIds.join(",")
+        },
         ...options,
       })
     ).data;

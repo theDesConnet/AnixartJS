@@ -28,6 +28,7 @@ export class Release {
    *
    * @param releaseId - ID релиза.
    * @param extendedMode - Запрашивать расширенные данные релиза. По умолчанию: true.
+   * @param details - Получить детализированный ответ. По умолчанию: true.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
    * @returns Релиз — {@link IReleaseResponse}.
    *
@@ -42,6 +43,7 @@ export class Release {
    * const result = await client.endpoints.release.get(
    *   releaseId,
    *   extendedMode,
+   *   true,
    *   { timeoutMs: 15_000 },
    * );
    * console.log(result.release);
@@ -49,6 +51,7 @@ export class Release {
   public async get(
     releaseId: number,
     extendedMode: boolean = true,
+    details: boolean = true,
     options: IRequestOptions = {},
   ): Promise<IReleaseResponse> {
     return (
@@ -57,6 +60,7 @@ export class Release {
         method: "GET",
         auth: { type: "Anixart" },
         query: {
+          details,
           extended_mode: extendedMode,
         },
         ...options,
@@ -65,6 +69,8 @@ export class Release {
   }
 
   /**
+   * @deprecated В Anixart v11.3 (Beta) данный метод был убран.
+   * 
    * Получить релиз который можно продолжить смотреть.
    *
    * Токен клиента передаётся в query, если задан.

@@ -19,6 +19,7 @@ import {
   ChannelWidgetSort,
   EditorAvailableResult,
   IArticle,
+  IArticleLimits,
   IProfileCompact,
   IResponse,
 } from "../";
@@ -207,6 +208,7 @@ export interface IBlogCreateResponse extends IResponse<BlogCreateResult> {
 /** Доступность редактора и токен загрузки медиа. */
 export interface IEditorAvailableResponse extends IResponse<EditorAvailableResult> {
   media_upload_token: string | null;
+  limits: IArticleLimits | null;
 }
 
 /** Каналы, доступные пользователю в редакторе. */

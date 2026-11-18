@@ -10,7 +10,7 @@
 import { ICommonComment, ICommonCommentCompact, IResponse } from "../common/types";
 import { IProfile } from "../profile/types";
 import { IRelease } from "../release/types";
-import { CollectionCreateEditResult, CollectionEditImageResult, CollectionResult } from "./enums";
+import { CollectionCreateEditResult, CollectionEditImageResult, CollectionResult, ReleaseAddCollectionResult, ReleaseRemoveCollectionResult } from "./enums";
 
 /** Пользовательская коллекция с релизами и статистикой. */
 export interface ICollection {
@@ -29,6 +29,10 @@ export interface ICollection {
   is_favorite: boolean;
   releases: IRelease[];
   cover_animation?: string;
+  has_release: boolean | null;
+  release_count: number | null;
+  releases_preview: ICollectionReleasePreview[] | null;
+  watched_count: number | null;
 }
 
 /** Коллекция со счётчиками по разделам закладок. */
@@ -60,6 +64,11 @@ export interface ICollectionCompact {
   image: string;
 }
 
+export interface ICollectionReleasePreview {
+  id: number;
+  image: string;
+}
+
 /** Параметры коллекции и ID входящих в неё релизов. */
 export interface ICollectionCreateEditRequest {
   title: string;
@@ -76,4 +85,20 @@ export interface ICollectionCreateEditResponse extends IResponse<CollectionCreat
 /** Адрес новой обложки коллекции. */
 export interface ICollectionEditImageResponse extends IResponse<CollectionEditImageResult> {
   url: string | null;
+}
+
+export interface IReleaseAddCollectionResponse extends IResponse<ReleaseAddCollectionResult> {
+  collection: ICollection | null;
+}
+
+export interface ICollectionHubResponse extends IResponse {
+  my: ICollection[] | null;
+  my_count: number;
+  recommended: ICollection[] | null;
+  weekly: ICollection[] | null;
+}
+
+export interface IReleaseRemoveCollectionResponse
+  extends IResponse<ReleaseRemoveCollectionResult> {
+  collection: ICollection | null;
 }

@@ -477,26 +477,26 @@ export class Search {
    *
    * Токен клиента передаётся в query, если задан.
    *
-   * @param status - Список закладок — {@link BookmarkType}.
+   * @param profileId - ID профиля, среди друзей которого выполняется поиск.
    * @param data - Данные запроса — {@link ISearchRequest}.
    * @param page - Номер страницы, начиная с 0. По умолчанию: 0.
    * @param options - Параметры запроса: таймаут, сигнал отмены, версия API и обработка ошибок.
-   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IRelease}.
+   * @returns Страница результатов — {@link IPageableResponse} с элементами {@link IProfile}.
    *
    * @example
-   * import { Anixart, BookmarkType } from "anixartjs";
+   * import { Anixart } from "anixartjs";
    * import type { ISearchRequest } from "anixartjs";
    *
    * const client = new Anixart({ token: "YOUR_ANIXART_TOKEN" });
    *
-   * const status = BookmarkType.Watching;
+   * const profileId = 123;
    * const search: ISearchRequest = {
-   *   query: "приключения",
+   *   query: "anime_reader",
    * };
    * const page = 0;
    *
-   * const result = await client.endpoints.search.profileList(
-   *   status,
+   * const result = await client.endpoints.search.profileFriends(
+   *   profileId,
    *   search,
    *   page,
    *   { timeoutMs: 15_000 },
